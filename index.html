@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAEC Digital Assistant | Ghana Examinations Support</title>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; font-family:'Segoe UI',Arial,sans-serif; }
+  body { background:#dff1ff; display:flex; justify-content:center; padding:2px; }
+  /* Repeating WAEC watermarks fill both light-blue side margins in varied directions. */
+  body::before, body::after {
+    content:"";
+    position:fixed; top:0; bottom:0;
+    width:calc((100vw - 720px) / 2);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='230' viewBox='0 0 250 230'%3E%3Cg fill='%230052cc' fill-opacity='.20' font-family='Arial,sans-serif' font-size='13' font-weight='700'%3E%3Ctext x='8' y='28' transform='rotate(-32 8 28)'%3EWAEC - Committed To Excellence%3C/text%3E%3Ctext x='8' y='100' transform='rotate(24 8 100)'%3EWAEC - Committed To Excellence%3C/text%3E%3Ctext x='18' y='174' transform='rotate(-58 18 174)'%3EWAEC - Committed To Excellence%3C/text%3E%3Ctext x='8' y='222' transform='rotate(8 8 222)'%3EWAEC - Committed To Excellence%3C/text%3E%3C/g%3E%3C/svg%3E");
+    background-repeat:repeat; background-position:center top;
+    pointer-events:none; z-index:0;
+  }
+  body::before { left:0; }
+  body::after { right:0; }
+  #app { z-index:1; }
+  @media (max-width:760px) {
+    body::before, body::after { display:none; }
+  }
+  #app { position:relative; width:100%; max-width:720px; background:#fff; border-radius:22px; overflow:hidden;
+         box-shadow:0 6px 24px rgba(0,0,0,.15); display:flex; flex-direction:column;
+         height:calc(100vh - 4px); height:calc(100dvh - 4px); min-height:0; }
+
+  /* Header – blue + gold accent */
+  header {
+    background: linear-gradient(135deg, #0052cc, #007bff);
+    color:#fff; padding:30px 20px 26px; text-align:center;
+  }
+  .eyebrow {
+    display:inline-block;
+    font-size:14px; letter-spacing:2.6px; font-weight:700; text-transform:uppercase;
+    color:#ffe9a8; background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,225,150,.45);
+    padding:7px 20px; border-radius:999px; margin-bottom:15px;
+  }
+  header h1 {
+    font-size:32px;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+  }
+  header h1 img.waec-logo {
+    height:54px; width:54px;
+    object-fit:contain;
+    background:#fff;
+    border-radius:50%;
+    padding:3px;
+    box-shadow:0 1px 4px rgba(0,0,0,.2);
+  }
+  header p.tagline { font-size:18px; opacity:.95; margin-top:10px; }
+  header p.hint { font-size:11px; opacity:.8; margin-top:8px; line-height:1.4; }
+
+  .website-links {
+    display:flex; align-items:stretch; justify-content:center;
+    gap:12px; flex-wrap:nowrap; width:96%; max-width:680px;
+    margin:16px auto 0;
+  }
+  .waec-link {
+    display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    flex:1 1 0; min-width:0; margin-top:0; font-size:18px; font-weight:800;
+    border:2px solid #fff;
+    color:#0b3c8a; background:#ffd84d; text-decoration:none; text-align:center;
+    padding:11px 14px; border-radius:999px;
+    box-shadow:0 2px 6px rgba(0,0,0,.18);
+    transition: background .15s, transform .15s;
+  }
+  .waec-link:hover { background:#ffe27a; transform:translateY(-1px); }\n  .waec-link { cursor:pointer; font-family:inherit; }
+  .unified-link { background:#ffd84d; border:2px solid #fff; }
+  .unified-link:hover { background:#ffe27a; }
+
+  /* Breadcrumb – light yellow */
+  #breadcrumb {
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:#fff8e1; padding:12px 24px; min-height:74px;
+    font-size:18px; color:#333; border-bottom:1px solid #f0d78c;
+  }
+  #breadcrumb span { color:#b8860b; cursor:pointer; font-weight:600; }
+  .breadcrumb-exit-button {
+    flex:0 0 auto; background:#b8860b; color:#fff; border:1px solid #8a6d00;
+    border-radius:6px; padding:5.4px 8.4px; font-size:10.08px; font-weight:600;
+    cursor:pointer; white-space:nowrap; box-shadow:0 2px 5px rgba(0,0,0,.14);
+    transition:background .15s, transform .15s;
+  }
+  .breadcrumb-exit-button:hover { background:#8a6d00; transform:translateY(-1px); }
+  .breadcrumb-exit-button:focus-visible { outline:3px solid #0052cc; outline-offset:2px; }
+
+  #contentViewport { flex:1 1 0%; min-height:0; min-width:0; position:relative; overflow:hidden; }
+  #content { width:100%; height:100%; min-height:0; overflow-y:scroll; overflow-x:hidden; padding:14px 24px; display:flex; flex-direction:column; gap:14px; }
+  #content.question-list-page { padding-bottom:0; }
+  #content.answer-page { overflow-y:auto; }
+  #phoneScrollbar { display:none; }
+  #phoneScrollbar[hidden] { display:none !important; }
+
+  /* Hero intro */
+  .hero {
+    background:linear-gradient(135deg,#fff8e1,#ffffff);
+    border:1px solid #f0d78c; border-radius:14px;
+    padding:12px 12px; margin-bottom:2px;
+  }
+  .hero .kicker {
+    font-size:10.5px; letter-spacing:2px; font-weight:800; text-transform:uppercase;
+    color:#0052cc; display:block; margin-bottom:8px;
+  }
+  .hero h2 { font-size:20px; color:#1b1b1b; line-height:1.25; }
+  .hero p { font-size:13px; color:#5c4a00; margin-top:8px; line-height:1.5; }
+  .hero .rule { width:44px; height:4px; background:#d4a017; border-radius:4px; margin-top:12px; }
+
+  .section-label {
+    font-size:11px; letter-spacing:1.4px; text-transform:uppercase;
+    font-weight:700; color:#8a6d00; margin:6px 2px 0;
+  }
+
+  /* Topic buttons – gold/yellow */
+  .big-btn {
+    background:#fff; border:2px solid #d4a017; color:#8a6d00; border-radius:12px;
+    padding:16px; font-size:15px; font-weight:600; text-align:left; cursor:pointer;
+    display:flex; align-items:center; justify-content:space-between;
+    transition: background .15s, color .15s;
+  }
+  .big-btn:hover { background:#d4a017; color:#fff; }
+  a.big-btn { text-decoration:none; }
+  .resource-page-btn {
+    width:100%; flex:0 0 auto; min-width:0; margin-top:0;
+    font-family:inherit; font-size:16px; line-height:1.3;
+    padding:12px 16px; justify-content:center;
+  }
+  .resource-dropdown { display:flex; flex-direction:column; gap:8px; }
+  .resource-dropdown > .resource-page-btn { width:100%; }
+  .resource-sublist { display:flex; flex-direction:column; gap:8px; padding-left:22px; }
+  .resource-sublist[hidden] { display:none; }
+
+
+  /* Other Online Resources: compact two-column buttons with blue edges */
+  #content.resources-grid {
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    align-content:start;
+    gap:12px;
+  }
+  #content.resources-grid .resource-page-btn {
+    width:100%;
+    min-width:0;
+    min-height:48px;
+    margin:0;
+    padding:10px 8px;
+    font-size:13px;
+    line-height:1.3;
+    border:2px solid #0052cc;
+    border-radius:10px;
+    background:#ffd84d;
+    color:#0b3c8a;
+    text-align:center;
+    justify-content:center;
+    gap:5px;
+  }
+  #content.resources-grid .resource-page-btn:hover {
+    background:#ffe27a;
+    border-color:#003d99;
+  }
+  #content.resources-grid .resource-dropdown,
+  #content.resources-grid .resource-sublist {
+    display:contents;
+  }
+  #content.resources-grid .resource-sublist[hidden] {
+    display:none;
+  }
+  @media (max-width:540px) {
+    #content.resources-grid {
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:9px;
+    }
+    #content.resources-grid .resource-page-btn {
+      min-height:44px;
+      padding:9px 5px;
+      font-size:11px;
+    }
+  }
+
+
+  /* Question buttons – light yellow */
+  .q-btn {
+    background:#fffbf0; border:1px solid #f0d78c; color:#5c4a00; border-radius:16px;
+    padding:20px 22px; font-size:20px; line-height:1.45; text-align:left; cursor:pointer;
+  }
+  .q-btn:hover { background:#fff3cd; }
+
+  /* Answer box – yellow accent */
+  .answer-box {
+    white-space:pre-line;
+    background:#fff8e1; border-left:4px solid #d4a017; padding:16px; border-radius:8px;
+    font-size:15px; line-height:1.5; color:#5c4a00;
+    text-align:justify;
+  }
+
+  .nav-row { display:flex; gap:8px; margin-top:10px; }
+  /* Keep a compact question-list back button visible above the search bar. */
+  .topic-back-float {
+    position:relative; flex:0 0 auto; display:flex; justify-content:center;
+    width:100%; padding:4px calc(24px + 2%) 4px 24px; z-index:20;
+  }
+  .topic-back-float[hidden] { display:none; }
+  .topic-back-float .nav-btn {
+    display:block; flex:0 0 96%; width:96%; height:71px; padding:20px 22px;
+    font-size:20px; line-height:1.45; font-weight:400;
+    text-align:center; white-space:normal;
+    transform:none;
+  }
+  .topic-back-float .nav-btn.secondary {
+    background:#5c4a00; color:#fffbf0; border:1px solid #f0d78c; border-radius:16px;
+    box-shadow:none;
+  }
+  .topic-back-float .nav-btn.secondary:hover { background:#8a6d00; }
+  .nav-btn {
+    flex:1; background:#d4a017; color:#fff; border:none; border-radius:10px;
+    padding:12px; font-size:14px; cursor:pointer; font-weight:600;
+  }
+  .nav-btn:hover { background:#b8860b; }
+  .nav-btn.secondary {
+    background:#fff; color:#b8860b; border:2px solid #d4a017;
+  }
+  .nav-btn.secondary:hover { background:#fff8e1; }
+
+  .icon { font-size:20px; margin-right:10px; }
+
+  #searchWrap { display:flex; align-items:center; gap:12px; padding:14px 22px; background:#fff; border-top:1px solid #f0d78c;
+    flex:0 0 auto; min-width:0; padding-bottom:calc(14px + env(safe-area-inset-bottom)); }
+  #searchWrap input {
+    flex:1 1 auto; min-width:0; width:auto; padding:20px; border-radius:14px;
+    border:1px solid #f0d78c; font-size:20px; line-height:24px;
+  }
+  .search-exit-button {
+    flex:0 0 auto; background:#b8860b; color:#fff; border:1px solid #8a6d00;
+    border-radius:8px; padding:10px 12px; font-size:14px; font-weight:600;
+    cursor:pointer; white-space:nowrap; box-shadow:0 2px 5px rgba(0,0,0,.14);
+    transition:background .15s, transform .15s;
+  }
+  .search-exit-button:hover { background:#8a6d00; transform:translateY(-1px); }
+  .search-exit-button:focus-visible { outline:3px solid #0052cc; outline-offset:2px; }
+  #searchWrap input:focus {
+    outline:none; border-color:#d4a017;
+    box-shadow:0 0 0 3px rgba(212,160,23,.2);
+  }
+
+  #content { scrollbar-width:thin; scrollbar-color:#c9a63a #fff8e1; }
+  ::-webkit-scrollbar{width:22px;height:22px;}
+  ::-webkit-scrollbar-track{background:#fff8e1;border-radius:8px;}
+  ::-webkit-scrollbar-thumb{background:#c9a63a;border:2px solid #fff8e1;border-radius:8px;}
+
+  @media (max-width:540px) {
+    body { padding:6px; }
+    #app { height:calc(100vh - 12px); height:calc(100dvh - 12px); min-height:0; border-radius:18px; }
+    header { padding:22px 16px 20px; }
+    .eyebrow { font-size:11px; letter-spacing:2px; padding:5px 12px; margin-bottom:10px; }
+    header h1 { font-size:23px; gap:8px; }
+    header h1 img.waec-logo { width:40px; height:40px; }
+    header p.tagline { font-size:14px; margin-top:8px; }
+    .website-links { gap:8px; width:96%; max-width:none; margin:12px auto 0; flex-wrap:nowrap; }
+    .waec-link { flex:1 1 0; min-width:0; margin-top:0; font-size:15px; font-weight:800; line-height:1.25; padding:10px 6px; gap:4px; border-width:2px; }
+    #breadcrumb { min-height:60px; padding:10px 14px; font-size:14px; }
+    #content { padding:12px 26px 12px 12px; gap:10px; scrollbar-width:none; }
+    #content::-webkit-scrollbar { display:none; }
+    #phoneScrollbar {
+      display:block; position:absolute; top:12px; right:3px; bottom:12px;
+      width:12px; background:#fff8e1; border-radius:8px; z-index:4;
+      pointer-events:none;
+    }
+    #phoneScrollbarThumb {
+      position:absolute; top:0; left:2px; right:2px; min-height:28px;
+      background:#c9a63a; border:1px solid #fff8e1; border-radius:8px;
+      will-change:transform,height;
+    }
+    #content.question-list-page { padding-bottom:0; }
+    .q-btn { padding:14px 16px; font-size:16px; border-radius:12px; }
+    .topic-back-float { padding:4px calc(12px + 2%) 4px 12px; }
+    .topic-back-float .nav-btn { flex-basis:96%; width:96%; height:53px; padding:14px 16px; font-size:16px; }
+    #searchWrap { gap:8px; padding:10px; padding-bottom:calc(10px + env(safe-area-inset-bottom)); flex:0 0 auto; }
+    #searchWrap input { padding:12px; font-size:16px; line-height:20px; }
+    .search-exit-button { padding:8px 9px; font-size:11px; }
+    ::-webkit-scrollbar { width:14px; height:14px; }
+  }
+
+
+  .exit-buttons button:focus-visible { outline:3px solid #0052cc; outline-offset:2px; }
+
+  /* ============ EXIT CONFIRMATION ============ */
+  .exit-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; z-index:9999; padding:20px; }
+  .exit-overlay.is-open { display:flex; }
+  .exit-dialog { width:100%; max-width:360px; background:#fff; border-radius:16px; padding:22px; text-align:center; box-shadow:0 10px 35px rgba(0,0,0,.3); }
+  .exit-dialog .exit-icon { font-size:38px; margin-bottom:8px; }
+  .exit-dialog h2 { color:#0052cc; font-size:19px; margin-bottom:8px; }
+  .exit-dialog p { color:#555; font-size:14px; line-height:1.5; margin-bottom:18px; }
+  .exit-buttons { display:flex; gap:10px; }
+  .exit-buttons button { flex:1; border:none; border-radius:10px; padding:12px; font-size:14px; font-weight:600; cursor:pointer; }
+  .stay-btn { background:#0052cc; color:#fff; }
+  .stay-btn:hover { background:#003d99; }
+  .exit-btn { background:#d4a017; color:#fff; }
+  .exit-btn:hover { background:#b8860b; }
+
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <span class="eyebrow">Ghana Examinations Support</span>
+    <h1>
+      <!-- WAEC logo: replace src with your official logo file if needed -->
+      <img
+        class="waec-logo"
+        src="https://tse2.mm.bing.net/th/id/OIP.DBLiZmslLR6GZgZigtwJgQHaE7?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+        alt="WAEC GHANA"
+        onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2230%22 fill=%22%23d4a017%22/%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2224%22 fill=%22%23fff%22/%3E%3Ctext x=%2232%22 y=%2238%22 text-anchor=%22middle%22 font-size=%2214%22 font-weight=%22bold%22 fill=%22%230052cc%22 font-family=%22Arial%22%3EWAEC%3C/text%3E%3C/svg%3E';"
+      >
+      WAEC Digital Assistant
+  </h1>
+    <p class="tagline">Clear Guidance For Every Step of Your Examination Journey.</p>
+    <div class="website-links">
+      <a class="waec-link" href="https://waecgh.org" target="_blank" rel="noopener"> WAEC Ghana Website</a>
+      <button class="waec-link unified-link" type="button" onclick="openOtherResources()">Other Online Resources</button>
+    </div>
+  </header>
+  <div id="breadcrumb"><span onclick="goHome()">🏠 Home</span></div>
+  <div id="contentViewport">
+    <div id="content"></div>
+    <div id="phoneScrollbar" aria-hidden="true">
+      <div id="phoneScrollbarThumb"></div>
+    </div>
+  </div>
+  <div id="topicBackFloat" class="topic-back-float" hidden>
+    <button id="topicBackButton" type="button" class="nav-btn secondary">⬅ Back to Main Topics</button>
+  </div>
+  <div id="searchWrap">
+    <input id="searchBox" placeholder="Or type to search..." oninput="handleSearch(this.value)">
+    <button id="searchExitButton" type="button" class="search-exit-button" onclick="showExitConfirmation(event)">Exit Chatbot</button>
+  </div>
+</div>
+
+<!-- EXIT CONFIRMATION DIALOG -->
+<div id="exitOverlay" class="exit-overlay" aria-hidden="true">
+  <div class="exit-dialog" role="dialog" aria-modal="true" aria-labelledby="exitDialogTitle" aria-describedby="exitDialogMessage">
+    <div class="exit-icon" aria-hidden="true">⚠️</div>
+    <h2 id="exitDialogTitle">Exit WAEC Digital Assistant?</h2>
+    <p id="exitDialogMessage">Are you sure you want to leave the WAEC Digital Assistant?</p>
+    <div class="exit-buttons">
+      <button type="button" class="stay-btn" onclick="cancelExit()">Stay</button>
+      <button type="button" class="exit-btn" onclick="confirmExit()">Exit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ KNOWLEDGE BASE ============ */
+const KB = {
+"ℹ️ About WAEC": {
+  icon:"ℹ️",
+  items:[
+["What is WAEC?","The West African Examinations Council (WAEC) is a regional examination board established in 1952 to harmonize and administer pre-university assessments in English-speaking West Africa.\n \n Key Historical Milestones.\n• Origin (1948–1950): The idea arose from the need to replace British-administered examinations (such as the Cambridge and London exam boards) with a local system tailored to West African realities. Following a study by Dr. George Barker Jeffery (the Jeffery Report), a regional board was officially proposed.\n \n• Enactment (1951–1952): The colonial governments of the Gold Coast (now Ghana), Nigeria, Sierra Leone, and The Gambia passed the WAEC Ordinances in 1951, formally launching the council in 1952 with its headquarters in Accra, Ghana.\n \n • Expansion (1974): Liberia joined the council as its fifth member nation.\n \n • Legal Convention (1982/1984): Member states signed a new convention in 1982 (taking effect in 1984) to give WAEC full status as an independent international organization.The West African Examinations Council, responsible for standardized exams in West Africa."],
+["What does WAEC do?","Develops, conducts, and certifies exams like BECE, WASSCE, WASSCE PC, GBCE and ABCE. etc"],
+["Who is the Head of the WAEC Ghana National Office?","Dr. (Mrs.) Rosemond Wilson, an experienced and accomplished educationist, mathematician and assessment specialist.\n \n She holds a BSc. in Mathematics from the KNUST, MSc. in Statistics and MA in Measurement and Evaluation from the University of Cape Coast. She also holds a PhD in Mathematics Education from the University of Education, Winneba."],
+["Where can I find WAEC's Head Office?","WAEC Ghana's National Head Office is located at Ridge in Accra."],
+["What are WAEC's opening hours?","Generally Monday–Friday, standard office hours."],
+["What is WAEC's official email?","WAEC Ghana's official email address is info@waecgh.org."],
+["What examinations does WAEC conduct?","BECE, WASSCE (school & private), GBCE/ABCE, and more."],
+["What is WASSCE?","The West African Senior School Certificate Examination."],
+["What is BECE?","The Basic Education Certificate Examination (end of JHS)."],
+["What is ABCE?","The Advanced Business Certificate Examination."],
+["What is GBCE?","The General Business Certificate Examination."],
+["What is WASSCE for Private Candidates?","A version of WASSCE for independent candidates, held Nov/Dec."],
+["What is the difference between WASSCE and BECE?","WASSCE is senior high completion; BECE is junior high completion."],
+["How does WAEC mark examination scripts?","By trained examiners under supervision at marking centres."],
+["How are examination papers secured?","Strict security protocols during printing, transport, and storage."],
+["How does WAEC prevent examination malpractice?","Security protocols, invigilator training, and strict penalties."],
+["How does WAEC ensure fairness in marking?","Standardized schemes, examiner training, and script coding."]
+]},
+"☎️ Regional Office Locations & Contacts": {
+  icon:"☎️",
+  items:[
+["Does Waec provide services to the public at its regional offices.?","Yes. WAEC provides services through Regional offices serving different parts of Ghana."],
+["What services are available at WAEC branches?","Services may include examination enquiries, purchase of past questions, results enquiries, certificates enquiries, confirmation of results enquiries, verification enquiries, and other WAEC services."],
+["Can I collect my WAEC certificate at a branch?","Certificate collection arrangements depend on the service involved. Contact the relevant WAEC office."], 
+["Can I apply for a certificate at a WAEC branch?","Some certificate-related services are handled through WAEC online channels https://certificaterequest.waecgh.org/."],
+["Can I confirm my WAEC results at a branch?","WAEC provides result confirmation services online. Visit https://resultconfirmation.waecgh.org/."],
+["What documents should I take to WAEC branch?","Requirements depend on the service. You may need identification, examination details, index number,  passport photograph or other supporting documents."], 
+["Do I need my Ghana Card to visit WAEC branch?","Identification requirements depend on the service. Carry a valid form of identification where required."],
+["What time does WAEC branch open?","Opening hours is uniform across all offices including the branch office. Opening hours may change on public holidays, weekends or special occasions."], 
+["Can I call a WAEC branch before visiting?","Yes. It is advisable to contact the relevant office beforehand."], 
+["Can I send someone to WAEC branch office on my behalf?","This depends on the service. Some transactions may require the applicant or certificate holder to appear personally, while others may permit an authorised representative."],
+["Can WAEC branches help with old examination results?","WAEC can assist with enquiries concerning past examinations, subject to the availability of records and the applicable procedure."],
+["Can WAEC send my document to another branch?","This depends on the service and WAEC's current arrangements. Confirm with the office handling your request."],
+["Can I pay for WAEC services at a branch?","Payment methods vary according to the service. Confirm the approved payment method before making payment."],
+["How much does a WAEC branch service cost?","Fees vary according to the service."], 
+["Can I make a WAEC payment online?","Some WAEC services have online payment options."], 
+["Can I submit a complaint at a WAEC branch?","Yes, WAEC offices can provide guidance on complaints and enquiries. Provide relevant documents and details concerning your complaint."],
+["Can WAEC branches handle school enquiries?","Yes. Schools and institutions can make various examination-related enquiries through the appropriate WAEC branch office."],
+["Where is the WAEC Greater Accra Regional Office located?","The WAEC office serving the Greater Accra Region is located at the WAEC Head Office, Examination Loop, behind Ridge Hospital, Accra. The GPS Address is GA-028-4961. Telephone: 0302-208201 to 0302-208209."],
+["Where is the WAEC Eastern Regional Office located?","The WAEC Eastern Regional Office (Koforidua Branch) is located at Old Estate Road, Nsukwao, Koforidua, Eastern Region. The GPS address is EN-004-7100. Telephone: 0342-020075 / 0342-020921 / 0342-020922. WAEC Ghana"],
+["Where is the WAEC Central Regional Office located?","The WAEC Central Regional Office (Cape Coast Branch) is located at Mempeasem, off Jukwa Road, Cape Coast, Central Region. The GPS address is CC-260-5684. Telephone: 0332-032878 / 0332-037086 / 0332-037085."],
+["Where is the WAEC Western Regional Office located?","The WAEC Western Regional Office (Sekondi Branch) is located near the Regional Coordinating Council, Sekondi, Western Region. The GPS address is WS-001-6065. Telephone: 0312-046334 / 0312-046041."],
+["Where is the WAEC Ashanti Regional Zonal Office located?","The WAEC Ashanti Regional Office (Kumasi Zonal Office) is located Near Kumasi Technical Institute (KTI), Kumasi, Ashanti Region. The GPS address is AK-021-2220. Telephone: 0322-034452 / 0322-026064 / 0322-034453 / 0322-034449."],
+["Where is the WAEC Brong Ahafo Regional Office located?","The WAEC Bono Regional Office (Sunyani Branch) is located behind the Ghana Legion and District Assembly Offices, Sunyani, Bono Region. The GPS address is BS-0022-8262. Telephone: 0352-024462 / 0352-027016."],
+["Where is the WAEC Volta Regional Office located?","The WAEC Volta Regional Office (Ho Branch) is located opposite the Roads and Highways Offices, Ho, Volta Region. The GPS address is VH-0004-6862. Telephone: 0362-026164 / 0362-028254."],
+["Where is the WAEC Northern Regional Office located?","The WAEC Northern Regional Office (Tamale Branch) is located near GNAT Hostel, Tamale, Northern Region. The GPS address is NS-046-2300. Telephone: 0372-022854 / 0372-023092."],
+["Where is the WAEC Upper East Regional Office located?","The WAEC Upper East Regional Office (Bolgatanga Branch) is located at SOE Residential Area, near Catering Rest House, Bolgatanga, Upper East Region. The GPS address is UB-0092-1763. Telephone: 0382-024267 / 0382-023232."],
+["Where is the WAEC Upper West Regional Office located?","The WAEC Upper West Regional Office (Wa Branch) is located at Chako, behind the Department of Feeder Roads, Wa, Upper West Region. The GPS address is XW-0258-0813. Telephone: 0392-022278 / 0392-020588."],
+["Can I visit any WAEC branch for services?","Yes, some services may be available at the branch offices, while others may require you to use the online platform at www.waecgh.org or contact the head office."],
+["Can I make an appointment before visiting WAEC?","Where appointments are required or available for a particular service, follow the instructions provided by WAEC."],
+["Do I need to go to the Head Office in Accra?","Not necessarily. The appropriate office depends on the service and your location."], 
+]},
+"📝 WASSCE School Examination": {
+  icon:"📝",
+  items:[
+["When does WASSCE registration open?","Registration usually opens at the start of the academic year, around September/October. Your school will inform you, and exact dates are on waecgh.org."],
+["When does registration close?","Registration typically closes a few weeks later, often around November/December. Check with your school or www.waecgh.org."],
+["Can I register after the deadline?","Late registration is generally not permitted, but exceptions may be allowed with a late penalty fee. Contact your school or nearest WAEC office immediately."],
+["How much does WASSCE registration cost?","Fees are set annually by WAEC/Ministry of Education. Ask your school or check waecgh.org for the current rate."],
+["What subjects can I register?","4 core subjects (English, Mathematics, Integrated Science, Social Studies) plus electives based on your programme."],
+["How many subjects can I register?","Typically 6–9 subjects: 4 core + up to 5 electives, depending on your programme."],
+["Can I change my subjects after registration?","Only within the official amendment period, processed through your school before the deadline."],
+["Can I change my school?","A change must be requested jointly by both schools and approved by WAEC before the deadline."],
+["What documents do I need to register?","A valid Ghana Card (or birth certificate), passport photos, and your school's registration form."],
+["Can I register as a private candidate?","Yes, private candidates register directly with WAEC during the Nov/Dec registration window."],
+["What is the difference between school candidate and private candidate?","A school candidate is entered by a recognized school; a private candidate registers independently for the Nov/Dec exam."],
+["Where can I register?","School candidates register through their school; private candidates register at designated WAEC centres/portal."],
+["How do I correct my name or date of birth?","Report to your school immediately for correction. After the deadline, submit a formal request with supporting documents."],
+["What happens if my school has entered my details incorrectly?","Notify your school right away. After the deadline, submit an amendment request with evidence to WAEC."],
+["Can I register if I don't have a Ghana Card?","Yes, a birth certificate or passport may be accepted as alternative ID — confirm with your school."],
+["How do I know that my registration was successful?","Your school will confirm and you'll receive a registration slip/index number."],
+["How do I obtain my registration number?","Issued by your school after successful registration, printed on your registration slip."],
+["What happens if I lose my registration documents?","Contact your school to reissue documents or confirm your details on the WAEC portal."]
+]},
+"👤 WASSCE Private Examination (1st & 2nd Series)": {
+  icon:"👤",
+  items:[
+["What is Series 1?","Series 1 is the first PC exams written in the early part of the year - check https://unified.ghanawaec.org/ for details."],
+["What is Series 2?","Series 2 is the second PC exams written in the later part of the year - check https://unified.ghanawaec.org/ for details."],
+["When is the next WASSCE for Private Candidates?","Usually held in November/December — check waecgh.org."],
+["How do I register for WASSCE PC?","During the announced window via https://unified.ghanawaec.org/."],
+["How much is private candidate registration?","Varies yearly and by subject count — check WAEC's fee schedule."],
+["Where are the examination centres?","Assigned by WAEC based on your registration location."],
+["Which subjects are available?","Most WASSCE subjects, though availability may vary."],
+["Can I retake only one subject?","Yes, register just for the subject(s) you wish to improve."],
+["Can I retake several subjects?","Yes, you can register for multiple subjects."],
+["Can I combine private-candidate results with school WASSCE?","Yes, generally combinable for admission purposes."],
+["Can I use Nov/Dec results for university admission?","Yes, treated the same as school WASSCE results."],
+["When will private candidate results be released?","A few months after the exam; WAEC announces the date."],
+["How do I obtain my private candidate certificate?","Collect in person at a WAEC office with valid ID, once ready."]
+]},
+"📘 BECE School Examination": {
+  icon:"📘",
+  items:[
+["What is BECE?","The Basic Education Certificate Examination is taken at the end of Junior High School."],
+["When is BECE registration?","Announced yearly and registration is done through the candidate's Junior High School. LATE registration is highly discouraged "],
+["What are the BECE registration requirements?","Registration is done through a recognized Junior High School with bio-data and photos.\n \n1. A Candidate should have completed JHS 1, 2 and 3.\n \n2. A candidate MUST have Continuous Assessment scores entered for ALL the three years in School.\n \n3. Bio-data corrections made during registration must be completed within a specified time frame. "],
+["What subjects are offered?","Core subjects plus electives like French, Computing, etc."],
+["When will BECE results be released?","A few months after the examination. The date is announced by WAEC."],
+["How do I check BECE results?","Through WAEC's results checker portal at   www.eresults.waecgh.org with index number, Serial Number and PIN."],
+["What happens if a BECE result is withheld?","Similar to all examinations — often an examination malpractice investigations is underway."],
+["How do I obtain a BECE certificate?","Collect it through your school."],
+["How do I replace a lost BECE certificate?","The Council does not issue duplicate certificates. The Council, however, issues Attestation of Results, Confirmation of Results etc which are as valid as the certificate. Apply online at www.resultconfirmation.waecgh.org or visit the RATD office in Accra or the Branch Offices."],
+["How do I verify a BECE result?","Submit a result comfirmation request to WAEC through www.resultconfirmation.waecgh.org."]
+]},
+"👤 BECE Private Examination": {
+  icon:"👤",
+  items:[
+["What is BECE for Private Candidates?","It is the BECE examination conducted for eligible candidates who are not taking the examination as regular school candidates."],
+["Who is Eligible for the Private BECE?","Registration for the BECE for Private Candidates is open to two specific categories of individuals.\n \n1. Re-sitters, ie anyone who previously sat for the BECE but did not obtain their desired grades or failed to meet the required grade for school placement. You must provide your index number and the year of your previous examination during registration.\n \n2. First-timers, ie individuals who have never written the BECE before but want to obtain the certificate or gain entry into a Senior High School or Technical Institute. Candidates must be 16 years of age or older and will be required to provide their date of birth during the registration process to verify their age.\n \n3. The registration process is strictly online and unlike public school candidates, private candidates must personally pay for their registration fees by printing an invoice and paying at a designated bank."],
+["How do I register?","Registration for candidates in respect of the examination will involve the capturing of biodata and uploading of registration data online for all private candidates. Candidates are required to capture their fingerprints at designated internet cafés to commence registration. Candidates may subsequently continue the registration process on their own after the capture of fingerprints."],
+["What are the early steps in the Registration Process?","1. Log on to www.unified.ghanawaec.org.\n \n2. Select the link “BECE PRIVATE”. Follow the steps to complete registration.\n \n NOTE THAT YOUR REGISTRATION IS NOT VALID TILL YOU PAY THE REQUISITE FEE(S)."],
+["Will I get my centre and other examination details?","The centre and other examination details would be provided to candidates before the start of the examination."],
+["What subjects can I take?","These are the subjects approved by WAEC for the BECE Private Candidates examination. You are required to select any number of subjects from one to a maximum of eleven.\n \n The Core Subjects are \n1. English Language\n2. Social Studies\n3. Religious and Moral Education\n4. Mathematics\n5. Science\n6. Creative Art and Design\n7. Career Technology\n \n The Elective Subjects are \n1. Ghanaian Language and Culture Options (choose only one)\n2. Dagaare\n3. Dagbani\n4. Dangme\n5. Ewe\n6. Fante\n7. Ga\n8. Gonja\n9. Kasem\n10. Nzema\n11. Akuapem Twi\n12. Asante Twi\n13. Gurune \n \n The Optional Subjects are \n1. French,\n2. Computing,\n3. Arabic.\n \n UNDER NO CIRCUMSTANCES should any candidate write a subject or an option that he or she had not registered for. NO RESULTS would be processed for the candidates in the unregistered subject."],
+["Can I correct my entries after submission?","Correction of entries after submission attracts a penalty. Candidates who wish to make any change(s) will pay the required fees as stated by the Council where applicable for correction of centre, name, gender, address, picture, signature or substitution of subject."],
+["How much is late entries penalty fees?","Late entries will attract the following penalties.\n(1) Late Entry: One and half (1½) times the total entry fee and (2) Substitution of Subject(s): One and half (1½) times the subject(s) fee."],
+["Which Banks are mandated by WAEC to receive exams registration fees?","Candidates may pay their registration fees at any branch of the following banks:\n \n1. Access Bank (Ghana) Ltd\n2. Agricultural Development Bank (ADB)\n3. Bank of Africa (Ghana) Ltd (BOA)\n4. Consolidated Bank (Ghana) Ltd (CBG)\n5. Ecobank (Ghana) Ltd\n6. Prudential Bank (Ghana) Ltd (PBL)\n7. United Bank for Africa (Ghana) Ltd (UBA)\n8. Zenith Bank (Ghana) Ltd."],  
+["Can I register for more than one subject?","Yes. Subject combinations are subject to the conditions and approved subjects specified by WAEC for the examination year."],
+["Can my money be refunded to me if I no longer want to write the examination after payment have been paid?","The Council does not undertake to refund fees paid for its services. However, if notice of withdrawal of entry is received before the start of the examination, consideration may be given for the refund of fees paid solely at the discretion of the Council."],
+["Where can I write the examination in the GREATER ACCRA REGION?","The centres are (Accra 5011001) and (Tema - 5012001)."],
+["Where can I write the examination in the EASTERN REGION?","The centre is (Koforidua 5021001)."],
+["Where can I write the examination in the CENTRAL REGION?","The centres are (Cape Coast 5031001) & (Winneba 5032001)."],
+["Where can I write the examination in WESTERN & WESTERN NORTH REGIONS?","The centres are (Sekondi 5041001) & (Sefwi Wiawso 5151001)."],
+["Where can I write the examination in the ASHANTI REGION?","The centre is (Kumasi 5051001)."],
+["Where can I write the examination in the BONO & BONO EAST & AHAFO REGIONS?","The centres are (Sunyani 5061001), (Techiman 5111001) and (Goaso 5101001)."],
+["Where can I write the examination in the VOLTA & OTI REGIONS?","The centres are (Ho 5071001) & (5131001 Dambai)."],
+["Where can I write the examination in the NORTHERN & NORTH EAST & SAVANNAH REGIONS?","The centres are (Tamale 5081001) & (Damango 5141001) & (Gambaga 5121001)."],
+["Where can I write the examination in the UPPER EAST REGION?","The centre is (Bolgatanga 5091001)."],
+["Where can I write the examination in the UPPER WEST REGION?","The centre is (Wa 5001001)."],
+["What about BARRED CANDIDATES?","Barred candidates who register for the examination before the expiration of their sanction shall receive no results and any fees paid shall be forfeited."],
+["Can I request for remarking?","Requests for remarking should be received not later than 60 days after the release of final results. After this period, no appeals on candidates’ results will be entertained. Any candidate who makes such a request will pay the appropriate fee."],
+["I am a Candidate with special needs, will I be catered for?","The Council will make test accommodation arrangements for candidates who cannot be assessed by the standard procedures set out because of disability or special educational needs. These candidates should \n1. Write officially to the Council stating the type of disability. \n2. State the form of assistance required. \n3. All such requests should be accompanied by valid medical report and forwarded to the Council within a certain time frame that will be determined by the office."],
+["How long will my answer scripts be kept by WAEC?","Scripts will be disposed of ninety (90) days after the release of final results. NO APPEALS RELATING TO RESULTS WILL THEREFORE BE ENTERTAINED AFTER THIS PERIOD."],
+["What happens to me If I am alleged to have been involved in Examination Malpractice?","Candidates and parents are to note that candidates alleged to have been involved in examination malpractice will have their relevant results withheld for a maximum period of seventy-five (75) days after the release of results. Candidates are therefore required to make themselves conversant with the rules and regulations governing the conduct of the examinations. Candidates can visit the Council’s website, www.waecgh.org. for more information"],
+["What about School placement?","You are required to visit the nearest Ghana Education Service (GES) office for direction."],
+["What identification do I need?","Candidates should use the identification documents and information required by WAEC during registration."],
+["What happens if I make a mistake during registration?","Contact WAEC or follow the official correction procedure within the period allowed for corrections."],
+["Can I change my examination centre?","Centre changes are subject to WAEC's rules and approval. A candidate should not assume that a centre can be changed automatically."],
+["What items are prohibited in the examination hall?","Candidates must comply with WAEC's examination regulations. Unauthorized materials, electronic devices and other prohibited items should not be taken into the examination hall."],
+["When are the private BECE results released?","Results are released by WAEC after the examination has been processed and finalized. The exact release date varies by examination cycle."],
+["How do I check my results?","Candidates can use the official WAEC results-checking system at www.eresults.waecgh.org when results are released."],
+["How do I obtain my certificate?","Certificate arrangements depend on WAEC's current procedures for the particular examination."],
+["Can I use my BECE result to apply to a school?","Yes, subject to the admission requirements of the school or institution concerned."]
+]},
+"📙 GBCE — General Business Certificate Examination": {
+  icon:"📙",
+  items:[
+["What is GBCE?","GBCE means General Business Certificate Examination."],
+["How often is GBCE conducted?","GBCE is conducted once a year."],
+["Who can write GBCE?","The examination is available to school and private candidates."],
+["What is GBCE equivalent to?","WAEC states that the General Business Certificate is equivalent to the West African Senior School Certificate Examination (WASSCE)."],
+["What is GBCE designed for?","It prepares candidates for the world of work and further academic studies, including progression to ABCE and tertiary institutions."],
+["How many subjects can I enter for GBCE?","A candidate may enter up to eight subjects."],
+["What certificate will I receive for GBCE?","Candidates receive the General Business Certificate for the subjects in which they are successful."],
+["How do I register for GBCE?","Registration is carried out through the approved WAEC registration process."],
+["Can a private candidate register for GBCE?","Yes."],
+["Can a school register candidates for GBCE?","Yes, approved institutions can register their candidates."],
+["How many GBCE subjects can I register?","A candidate may register for up to eight subjects."],
+["Can I choose GBCE subjects from different categories?","Your subject combination must comply with the requirements for the certificate category you are pursuing."],
+["Can I register for only one GBCE subject?","Candidates should follow the current WAEC registration rules for the permitted entry combination. Certificates are awarded for subjects successfully completed."],
+["Where can I find the GBCE syllabus?","The GBCE syllabus is available through WAEC Ghana's official information channels."],
+["When will GBCE results be released?","WAEC announces the release of results after marking and processing are completed."],
+["How do I check my GBCE results?","Use the official WAEC Results Checker and select ABCE/GBCE as applicable."],
+["What happens if I fail a GBCE subject?","Check the current WAEC regulations for opportunities to enter the subject again."],
+["Can I use GBCE for further education?","Yes. GBCE can support progression to further academic studies, subject to the admission requirements of the institution and programme."],
+["Can GBCE lead to ABCE?","Yes. WAEC identifies progression to the Advanced Business Certificate level as one further-study route."],
+["Can I use GBCE for university admission?","Admission depends on the requirements of the particular tertiary institution and programme."],
+["How do I obtain my GBCE certificate?","Follow WAEC's current certificate request or collection procedures."],
+["How can I confirm my GBCE result?","Use WAEC's official result confirmation service where required."]
+]},
+"📗 ABCE — Advanced Business Certificate Examination": {
+  icon:"📗",
+  items:[
+["What is ABCE?","ABCE means Advanced Business Certificate Examination. It is a WAEC examination designed to prepare candidates for the world of work and further academic studies."],
+["How often is ABCE conducted?","ABCE is conducted once a year."],
+["Who can write ABCE?","ABCE is available to school and private candidates."],
+["What is ABCE equivalent to?","WAEC states that ABCE is equivalent to the former General Certificate of Education (Advanced Level)."],
+["What types of ABCE entry are available?","There are two options: Diploma Entry and Single Subject Entry."],
+["Can private candidates write ABCE?","Yes. Both school and private candidates can register for ABCE."],
+["What is the ABCE Diploma option?","It is an entry option requiring candidates to take three compulsory and two optional subjects."],
+["How many subjects are required for the Diploma?","Five subjects: three compulsory and two optional."],
+["How many sittings are allowed for the Diploma?","All five subjects must be passed in not more than two sittings."],
+["How long do I have to complete the Diploma?","The subjects must be passed within two calendar years from the date of first registration."],
+["What happens if I pass some subjects but not all?","A statement of results may be issued. If the remaining subjects are passed within the permitted period, the Diploma can subsequently be awarded."],
+["What happens if I do not complete the Diploma within two years?","You will receive individual Advanced Business Certificates for the subjects you passed."],
+["What is Single Subject Entry?","It allows a candidate to register for individual ABCE subjects without pursuing the Diploma combination."],
+["How many subjects can I enter under Single Subject Entry?","A candidate may enter for any number of single subjects."],
+["What certificate do I receive for ABCE?","An Advanced Business Certificate is awarded for each subject passed."],
+["How do I register for ABCE?","ABCE registration is done electronically through the approved WAEC registration process."],
+["Can I register as a private candidate for ABCE?","Yes."],
+["Can I register through a school for ABCE?","Yes, candidates attending approved schools can be registered as school candidates."],
+["How do I check my ABCE registration details?","Candidates should carefully check their entries and ensure that their personal and subject information is correct before submission."],
+["How often is ABCE registration conducted?","Registration dates are announced by WAEC for each examination year."],
+["When will ABCE results be released?","WAEC announces the release of results after the examination and completion of marking and processing."],
+["How do I check my ABCE results?","Use the official WAEC Results Checker and select the applicable ABCE/GBCE examination."],
+["What does my ABCE grade mean?","The grade indicates the candidate's performance in the relevant subject. Candidates should refer to the current WAEC grading information where applicable."],
+["What happens if I fail an ABCE subject?","Check the current WAEC registration regulations for opportunities to enter the subject again."],
+["Can I resit an ABCE subject?","Candidates should confirm the current year's resit/registration provisions from WAEC."],
+["How do I obtain my ABCE certificate?","Follow WAEC's current certificate collection or request procedures."],
+["How do I confirm my ABCE result?","Use WAEC's official result confirmation service where required."],
+["Can I request an ABCE attestation?","Follow WAEC's current procedures for requesting an attestation or other official document."]
+]},
+"🗓️ Examinations Timetable": {
+  icon:"🗓️",
+  items:[
+["When does WASSCE start?","Announced yearly by WAEC, usually around April/May. Check waecgh.org."],
+["When does WASSCE end?","Depends on the number of scheduled papers; see the official timetable."],
+["What time does the examination start?","Typically 8:00am for morning papers, 1–2pm for afternoon papers."],
+["What time should I arrive at the centre?","At least 30–45 minutes before the scheduled start time."],
+["Where is my examination centre?","Stated on your registration slip/exam card from your school."],
+["Can I change my examination centre?","Only in exceptional cases, requested through your school before exams begin."],
+["What happens if I arrive late?","You may be admitted at the supervisor's discretion, but with no extra time given."],
+["What should I bring to the examination hall?","Your exam ID/slip, writing materials, and any permitted instruments for that paper."],
+["What items are prohibited?","Phones, smartwatches, textbooks, notes, and unauthorized calculators."],
+["Can I take a calculator into the examination hall?","Yes, only for permitted papers and only WAEC-approved calculators."],
+["Which calculators are allowed?","Silent, non-programmable scientific calculators without text storage or graphics."],
+["Can I use a mathematical set?","Yes, for relevant papers like Mathematics and Technical Drawing."]
+]},
+"📏 Examination Rules": {
+  icon:"📏",
+  items:[
+["Can I take my phone into the examination hall?","No, mobile phones are strictly prohibited."],
+["What happens if I am caught with a phone?","Treated as suspected malpractice; results may be cancelled/withheld pending investigation."],
+["What constitutes examination malpractice?","Copying, unauthorized help, banned materials/phones, impersonation, and similar acts."],
+["Can I communicate with another candidate?","No, this is prohibited and treated as malpractice."],
+["Can I borrow a pen from another candidate?","No — request materials from the invigilator instead."],
+["Can I leave the examination hall early?","Only with the invigilator's permission, per centre rules."],
+["Can I go to the washroom during an examination?","Yes, with permission and escort from an invigilator."],
+["What happens if I fall sick during the examination?","Inform the invigilator immediately; special consideration may be arranged."],
+["What happens if I miss an examination?","Report immediately with evidence (e.g. medical report) to your school/WAEC."],
+["Can I write an examination on another day?","Only under approved special circumstances."],
+["What happens if there is an emergency?","Follow centre emergency procedures; WAEC may reschedule affected papers."],
+["What happens if I lose my question paper?","Report immediately to the invigilator for a replacement."],
+["What happens if the examination is interrupted?","The supervisor records it and informs WAEC, who may extend time or arrange a resit."],
+["What happens if I make a mistake on my answer booklet?","Neatly cross it out and continue — do not use correction fluid."],
+["Can I request extra paper?","Yes, ask the invigilator for additional answer sheets."],
+["What happens if my script is not collected?","Report immediately to the invigilator before leaving the hall."]
+]},
+"⚠️ Examination Malpractice": {
+  icon:"⚠️",
+  items:[
+["What is examination malpractice?","Any act that unfairly influences an exam outcome, e.g. cheating, impersonation, or collusion."],
+["What are the penalties for examination malpractice?","Ranges from cancellation of one subject to all results, and possible bans."],
+["Can WAEC cancel only one subject?","Yes, if malpractice is confined to that subject."],
+["Can WAEC cancel all my results?","Yes, in serious cases affecting overall exam integrity."],
+["Can my entire results be withheld?","Yes, pending investigation into suspected malpractice."],
+["How long can results be withheld?","Varies — from weeks to a few months, depending on the case."],
+["How do I appeal a malpractice decision?","Submit a formal written appeal with evidence within the appeal period."],
+["How can I check the status of a malpractice case?","Contact your school or the WAEC office handling your case."],
+["Can my parent/guardian appeal on my behalf?","Yes, with proof of relationship and identification."]
+]},
+"📊 Examination Results": {
+  icon:"📊",
+  items:[
+["When will the WASSCE results be released?","Announced via media, waecgh.org, and schools; dates vary yearly."],
+["Have the WASSCE results been released?","Check waecgh.org or official WAEC announcements."],
+["Where can I check my results?","Via WAEC's online results-checker portal using a PIN and index number."],
+["How do I check my results online?","Visit the checker page, enter index number, year, and PIN, then submit."],
+["Can I check my results with my phone?","Yes, via a browser, or USSD/SMS where available."],
+["How much does checking results cost?","A fee applies for the results checker PIN, sold at approved vendors."],
+["I bought a results checker but the PIN isn't working.","Confirm entry is correct; if it still fails, contact your vendor or WAEC's helpdesk."],
+["My PIN has been used already. What should I do?","Report to your point of purchase or WAEC with your receipt."],
+["I entered the wrong index number. What happens?","Re-enter the correct index number from your exam slip."],
+["My results page isn't loading.","Check your connection or try again later — the site may be busy after release."],
+["Why can't I access my results?","Could be wrong index/PIN, results not yet released, or being withheld."],
+["My result says \"results withheld.\" What does it mean?","Your result is held, often pending investigation or missing info."],
+["My result says \"results cancelled.\" What does it mean?","WAEC has annulled it, usually due to confirmed malpractice."],
+["My result says \"P\" What does it mean?","\"Pending\" — not finalized, often due to an unresolved query."],
+["Why has my result not been released?","Could be withheld status, missing data, or ongoing investigation."],
+["Why is one subject missing?","May relate to an issue with that paper — contact WAEC to investigate."],
+["Why has my result changed?","May follow a re-check, correction, or resolution of a withheld case."],
+["Can WAEC correct a result?","Yes, after a formal re-check/appeal establishes an error."],
+["What should I do if I believe my result is wrong?","Apply for a re-check/remark through your school or WAEC."]
+]},
+"🔤 Grade Meanings": {
+  icon:"🔤",
+  items:[
+["What does an A1 mean?","Excellent — the highest grade (roughly 75–100%)."],
+["What does B2 mean?","Very Good."],
+["What does B3 mean?","Good."],
+["What does C4 mean?","Credit."],
+["What does C5 mean?","Credit."],
+["What does C6 mean?","Credit (Pass)."],
+["What does D7 mean?","Ordinary Pass."],
+["What does E8 mean?","Ordinary Pass."],
+["What does F9 mean?","Fail."],
+["What is a pass?","Grades A1 to E8 are generally considered passing."],
+["What is a fail?","F9 is a failing grade."],
+["How is the WASSCE aggregate calculated?","Sum of grade-points (A1=1...F9=9) for your best 6 subjects. Lower total = better."],
+["How do I calculate my aggregate?","Add numeric values (1–9) of your best 6 subjects, including required core subjects."],
+["What is the best possible aggregate?","Aggregate 6 (A1 in all six counted subjects)."],
+["Does WAEC calculate aggregate for me?","No, WAEC issues grades only — aggregation is usually done by you or the institution."],
+["Which subjects count toward my aggregate?","Core subjects plus your best electives, per institution requirements."],
+["Does my elective subject count?","Yes, especially those relevant to your intended programme."],
+["Can I combine WASSCE results from different years?","Generally yes for admission, but check the specific institution's policy."]
+]},
+"🎓 University Admission": {
+  icon:"🎓",
+  items:[
+["Can I use my WASSCE results to apply to all universities in Ghana?","Yes, subject to each institution's specific entry requirements."],
+["How do I send my result to a university?","Most universities verify online using your index number, or request certified copies."],
+["Does WAEC send results directly to universities?","Not typically — universities usually verify through WAEC's service."],
+["How do universities verify my results?","Through WAEC's result verification service."],
+["What happens if my result has not yet been released for university placement?","Contact your school and the admissions office; a pending status may be considered."],
+["Can I use a provisional result?","Some institutions accept one while awaiting the certificate — check their policy."],
+["Can I use Nov/Dec results for admission?","Yes, generally accepted, subject to institutional requirements."],
+["What happens if my name differs from my admission application?","Provide an affidavit of the discrepancy plus supporting ID documents."]
+]},
+"📜 Certificates": {
+  icon:"📜",
+  items:[
+["When will certificates be available?","Usually several months after results are released; check WAEC announcements."],
+["How do I collect my certificate?","In person at the designated WAEC office with valid ID and result slip."],
+["Where do I collect my certificate?","At your regional WAEC office, or through your school for school candidates."],
+["Can someone collect my certificate for me?","Yes, with a letter of authorization and both parties' valid IDs."],
+["What identification is required?","A valid Ghana Card/passport plus your index number/result slip."],
+["I lost my certificate. What should I do?","Report the loss and apply for a replacement with required documents and fee."],
+["How do I replace a lost certificate?","Apply at a WAEC office with ID, proof of loss, and the replacement fee."],
+["How does WAEC detect fake certificates?","By cross-checking against official records and security features."],
+["How much does certificate replacement cost?","Check the current fee schedule at your WAEC office or waecgh.org."],
+["How long does replacement take?","Typically a few weeks, depending on record verification."],
+["Can I request a certified copy?","Yes, upon application and payment of the applicable fee."],
+["How do I obtain a confirmation of results?","Apply for a \"Confirmation of Results\" letter at your WAEC office."],
+["Can I get my certificate urgently?","Some offices offer expedited processing for a fee — enquire locally."],
+["Can my certificate be delivered to me?","Depends on the office's current services — enquire about courier options."],
+["Can WAEC correct an error on my certificate?","Yes, via a formal amendment request with supporting documents."],
+["My name is wrong on my certificate. What do I do?","Submit a name correction request with legal supporting documents."],
+["My date of birth is wrong. How do I correct it?","Submit a correction request with your birth certificate/Ghana Card."]
+]},
+"✅ Result Verification": {
+  icon:"✅",
+  items:[
+["How can an institution verify a WASSCE result?","Submit a verification request with the candidate's index number to WAEC."],
+["How can an employer verify a certificate?","Request verification directly from WAEC with candidate consent and the fee."],
+["How can I verify whether a certificate is genuine?","Request verification from WAEC using the certificate/index number."],
+["How long does verification take?","A few days to a few weeks, depending on volume."],
+["How much does verification cost?","Varies by type — check with WAEC for the current rate."],
+["Can foreign universities verify Ghana WASSCE results?","Yes, through WAEC's international verification service."],
+["Can an embassy verify my certificate?","Yes, directly from WAEC, often for visa/study purposes."],
+["What information is required for verification?","Full name, index number, exam year, and certificate type."],
+["Can I track my verification request?","Yes, using the reference/tracking number provided."],
+["Why has my verification request not been completed?","May be due to high volume or incomplete information — follow up with your reference number."]
+]},
+"✔️ Result Confirmation": {
+  icon:"✔️",
+  items:[
+["How can an institution confirm a WASSCE result?","Submit a verification request with the candidate's index number to WAEC."],
+["How can an employer confirm a certificate?","Request verification directly from WAEC with candidate consent and the fee."],
+["How can I confirm whether a certificate is genuine?","Request verification from WAEC using the certificate/index number."],
+["How long does confirmation take?","A few days to a few weeks, depending on volume."],
+["How much does confirmation cost?","Varies by type — check with WAEC for the current rate."],
+["Can foreign universities confirm Ghana WASSCE results?","Yes, through WAEC's international verification service."],
+["Can an embassy confirm my certificate?","Yes, directly from WAEC, often for visa/study purposes."],
+["What information is required for confirmation?","Full name, index number, exam year, and certificate type."],
+["Can I track my confirmation request?","Yes, using the reference/tracking number provided."],
+["Why has my confirmation request not been completed?","May be due to high volume or incomplete information — follow up with your reference number."]
+]},
+"👨‍👩‍👧 Parents & Guardians": {
+  icon:"👨‍👩‍👧",
+  items:[
+["How is my child's examination progressing?","Contact your child's school for updates."],
+["When will my child's results be released?","Follow WAEC's official announcements or ask the school."],
+["How can I check my child's results?","Use the WAEC results checker with your child's index number and a PIN."],
+["What does my child's result mean?","See the Grade Meanings section for what each grade represents."],
+["My child's result has been withheld. Why?","Often indicates a pending investigation — contact the school or WAEC."],
+["My child's result has been cancelled. What can I do?","File a formal appeal with WAEC and supporting evidence."],
+["How can I help my child appeal a decision?","Gather documentation and submit a written appeal to WAEC."],
+["My child's name is incorrect. What should I do?","Submit a name correction request with the birth certificate/Ghana Card."],
+["My child's date of birth is incorrect.","Submit a correction application with supporting legal documents."],
+["My child missed a paper during an examination. What happens?","Report immediately; special consideration may be granted depending on the reason."],
+["My child was sick during the examination.","Provide a medical report to support any request for special consideration."],
+["How can I contact WAEC about my child's case?","Contact the school first, then escalate to the regional office if needed."],
+["How can I verify my child's certificate?","Submit a verification request to WAEC with their certificate details."],
+["How can I obtain a replacement certificate?","Apply at a WAEC office with valid ID, index number, and fee."],
+["How do I know whether someone claiming to be from WAEC is genuine?","Verify through WAEC's official contact channels only."]
+]},
+"🏫 WASSCE Schools": {
+  icon:"🏫",
+  items:[
+["How do I register candidates?","Use the WAEC school portal to enter details and submit before the deadline."],
+["When does school registration open?","Announced each year at the start of the academic term before the exam."],
+["How do I access the school portal?","Log in with your school's official WAEC portal credentials."],
+["I forgot my school portal password.","Use the \"forgot password\" link, or contact WAEC IT support."],
+["How do I add candidates?","Use the \"add candidate\" function within the portal."],
+["How do I remove a candidate?","Use the candidate management section before the deadline."],
+["How do I correct candidate information?","Edit during the amendment window, or submit a formal request afterward."],
+["How do I change a candidate's subject?","Update the subject selection within the allowed period."],
+["How do I submit registration?","Use the \"submit\" function on the portal after confirming payment."],
+["How do I obtain the final timetable?","Download from the portal or official WAEC communication."],
+["How do I report an examination incident?","Complete an incident report form and submit to WAEC."],
+["How do I report suspected malpractice?","Report immediately to the supervisor and document formally."],
+["How do I handle an absent candidate?","Record the absence and report through your exam officer."],
+["How do I access results?","Through the school portal using your login credentials."],
+["How do I obtain candidates' result listing?","Download the full listing from the school portal."],
+["How do I obtain certificates?","Collected in bulk by an authorized school representative."],
+["How do I contact my WAEC regional office?","Find contact details on waecgh.org or through headquarters."]
+]},
+"💰 Examination Fees & Payments": {
+  icon:"💰",
+  items:[
+["How much does WASSCE registration cost?","Set annually — check with your school or waecgh.org."],
+["How much does private candidate registration cost?","Varies annually by subject count."],
+["How much does a results checker cost?","Set by WAEC yearly — available at approved vendors."],
+["How much does certificate replacement cost?","Check the current WAEC fee schedule."],
+["How much does result verification cost?","Varies by request type — check with WAEC."],
+["What payment methods does WAEC accept?","Approved banks, Mobile Money, and sometimes online card payments."],
+["Can I pay with Mobile Money?","Yes, generally accepted for many services."],
+["Can I pay with bank transfer?","Yes, via designated WAEC bank accounts."],
+["My payment was deducted but the service wasn't provided.","Keep your receipt and report to WAEC's finance office."],
+["How do I obtain a payment receipt?","Usually generated automatically — request a copy if not received."],
+["Can I get a refund?","Considered case-by-case with a formal request and evidence."]
+]},
+"📢 Examination Complaints & Appeals": {
+  icon:"📢",
+  items:[
+["How do I make a complaint?","Submit in writing to WAEC with your full details and the issue."],
+["How do I appeal my result?","Apply for a re-check/remark through your school or WAEC."],
+["How do I appeal a malpractice decision?","Submit a formal written appeal with evidence within the appeal window."],
+["How do I report an examination-centre problem?","Report to the supervisor, then notify your school and WAEC in writing."],
+["How do I report suspected examination malpractice?","Report immediately to the invigilator and follow up in writing to WAEC."],
+["Can I report anonymously?","Yes, WAEC generally accepts anonymous tips."],
+["How do I track my complaint?","Use the reference number given when you lodged it."],
+["How long does WAEC take to respond?","Varies, but WAEC aims to resolve within a reasonable period."],
+["Who can I contact if my complaint has not been resolved?","Escalate to your regional office or WAEC headquarters."],
+["Can I submit supporting documents?","Yes, always attach relevant evidence."],
+["How do I update an existing complaint?","Contact WAEC with your complaint's reference number."]
+]},
+"📍 Examination Centres": {
+  icon:"📍",
+  items:[
+["Where is my examination centre?","Indicated on your registration slip/exam card."],
+["How do I find my centre?","Check your exam slip or ask your school."],
+["What is the address of my centre?","Included in your exam documentation from your school."],
+["Can I get directions to my centre?","Ask your school or use map services; visit a day before if possible."],
+["Can I change my centre?","Only under exceptional, approved circumstances."],
+["What happens if I go to the wrong centre?","Inform the supervisor immediately for redirection."]
+]},
+"🚨 Scams & Fake Information": {
+  icon:"🚨",
+  items:[
+["Is this WAEC message genuine?","Verify against waecgh.org or official social media before trusting it."],
+["Has WAEC released the results?","Confirm only through waecgh.org or official announcements."],
+["Is this WAEC website genuine?","Only waecgh.org is official — beware of similar-looking domains."],
+["Is this WhatsApp number officially from WAEC?","Verify against official numbers on waecgh.org."],
+["Can someone change my WAEC grade?","No — this is impossible and illegal outside official processes."],
+["Can someone upgrade my result?","No, any such offer is a scam."],
+["Can someone remove a malpractice case?","No, only WAEC's official process can resolve this."],
+["How do I report a WAEC scam?","Report to WAEC offices and the police/cybercrime unit."],
+["What are WAEC's official social-media accounts?","Check waecgh.org for verified links."],
+["How can I identify a fake WAEC website?","Check for the correct domain and secure connection (https)."]
+]},
+"🌍 International Applicants": {
+  icon:"🌍",
+  items:[
+["How can I verify my WASSCE certificate for a foreign university?","Submit a verification request to WAEC."],
+["How do I get my results authenticated?","Apply to WAEC; further authentication (e.g. Foreign Affairs) may be needed."],
+["Can an embassy verify my certificate?","Yes, directly from WAEC."],
+["How do I send my result to a foreign institution?","Provide your index number for WAEC's verification service."],
+["Does WAEC issue transcripts?","Primarily certificates/statements of results — check institution requirements."],
+["How can an international organization verify my result?","Submit a formal verification request with consent."],
+["How long does international verification take?","Often a few weeks — plan ahead of deadlines."]
+]}
+};
+
+/* ============ OTHER ONLINE RESOURCES ============ */
+const ONLINE_RESOURCES = {
+  "EXAMS REGISTRATION": [
+    { label:"Register for BECE School", url:"https://www.waecinternetsolution.org/" },
+    { label:"Register for BECE Private", url:"https://unified.ghanawaec.org/Home/GeneralInformation/BECE" },
+    { label:"Register for WASSCE School", url:"https://www.waecinternetsolution.org/" },
+    { label:"Register for WASSCE Private", dropdown:[
+      { label:"PC 1st Series Exams", url:"https://unified.ghanawaec.org/Home/GeneralInformation/WASSCE" },
+      { label:"PC 2nd Series Exams", url:"https://unifiedstaging.ghanawaec.org/Home/GeneralInformation/WASSCE" }
+    ]},
+    { label:"Register for ABCE Exams", url:"https://unified.ghanawaec.org/Home/GeneralInformation/ABCE" },
+    { label:"Register for GBCE Exams", url:"https://unified.ghanawaec.org/Home/GeneralInformation/GBCE" }
+  ],
+  "EXAMS RULES & REGULATION": [
+    { label:"Exams Rules & Regulation", url:"https://waecgh.org/home/rules-and-regulations/" }
+  ],  
+  "EXAMS RESULTS": [
+    { label:"BECE School Results", url:"https://eresults.waecgh.org/" },
+    { label:"BECE Private Results", url:"https://eresults.waecgh.org/" },
+    { label:"WASSCE School Results", url:"https://ghana.waecdirect.org/" },
+    { label:"WASSCE Private Results", url:"https://ghana.waecdirect.org/" },
+    { label:"ABCE Results", url:"https://ghana.waecdirect.org/" },
+    { label:"GBCE Results", url:"https://ghana.waecdirect.org/" }
+  ],
+  "BECE GUIDELINES": [
+    { label:"BECE Guidelines", url:"https://waecgh.org/bece-guidelines-scheme-and-structure/" }
+  ],
+  "EXAM TIMETABLE": [
+    { label:"Examinations Timetables", url:"https://waecgh.org/timetable/" }
+  ],
+  "CERTIFICATES": [
+    { label:"Overview", url:"https://waecgh.org/home/certificates-overview/" },
+    { label:"Request and Status", url:"https://certificaterequest.waecgh.org/certificate" },
+    { label:"Collection Form", url:"https://waecgh.org/certificate-collection-form-2/" }
+  ],
+  "RESULT ATTESTATION & STATUS": [
+    { label:"Result Attestation & Status", url:"https://resultattestation.waecgh.org/attestation" }
+  ],
+  "RESULT CONFIRMATION & STATUS": [
+    { label:"Result Confirmation & Status", url:"https://resultattestation.waecgh.org/confirmation" }
+  ],
+  "RESULT VERIFICATION": [
+    { label:"Result Verification", url:"https://rvs.waecdirect.org/home/index?ReturnUrl=%2f" }
+  ],
+  "FOREIGN EXAMINATIONS": [
+    { label:"Foreign Examinations", url:"https://waecgh.org/home/foreign-professional-examinations/" }
+  ],
+  "E-VERIFIER": [
+    { label:"E-Verifier", url:"https://verify.waecgh.org/" }
+  ],
+  "EXAMINERS APPLICATION FORM": [
+    { label:"Examiners Form", url:"https://waecgh.org/examiners-application-form/" }
+  ],
+  "CHIEF EXAMINERS REPORT": [
+    { label:"Chief Examiners Report", url:"https://waecgh.org/chief-examiners-report/" }
+  ]
+};
+
+/* ============ APP STATE & NAV ============ */
+let state = { view:"home", category:null };
+const content = document.getElementById("content");
+const breadcrumb = document.getElementById("breadcrumb");
+const topicBackFloat = document.getElementById("topicBackFloat");
+const topicBackButton = document.getElementById("topicBackButton");
+const phoneScrollbar = document.getElementById("phoneScrollbar");
+const phoneScrollbarThumb = document.getElementById("phoneScrollbarThumb");
+// The topic list is rebuilt when an answer opens. Remember which question
+// was selected so “Previous Page” can bring it back into view.
+let categoryReturnQuestion = null;
+
+function updatePhoneScrollbar(){
+  const viewportHeight = content.clientHeight;
+  const contentHeight = content.scrollHeight;
+  const answerNeedsScroll = content.classList.contains("answer-page") && contentHeight > viewportHeight + 1;
+  phoneScrollbar.hidden = content.classList.contains("answer-page") && !answerNeedsScroll;
+  const trackHeight = phoneScrollbar.clientHeight;
+  if(!trackHeight || !viewportHeight) return;
+  const thumbHeight = Math.min(trackHeight, Math.max(28, trackHeight * viewportHeight / Math.max(contentHeight, 1)));
+  const maxThumbTop = trackHeight - thumbHeight;
+  const maxScroll = Math.max(0, contentHeight - viewportHeight);
+  const thumbTop = maxScroll ? content.scrollTop / maxScroll * maxThumbTop : 0;
+  phoneScrollbarThumb.style.height = `${thumbHeight}px`;
+  phoneScrollbarThumb.style.transform = `translateY(${thumbTop}px)`;
+}
+
+content.addEventListener("scroll", updatePhoneScrollbar, { passive:true });
+window.addEventListener("resize", updatePhoneScrollbar);
+
+function buildHero(){
+  const hero = document.createElement("div");
+  hero.className = "hero";
+  hero.innerHTML = `
+    <h2>How can WAEC assist you today?</h2>
+    <p>Browse the Topics or Type a Keyword in the Search Bar to Find Examination Related Information and Other Services.</p>
+    <div class="rule"></div>
+`;
+  return hero;
+}
+
+function render(){
+  content.classList.remove("question-list-page", "answer-page", "resources-grid");
+  topicBackFloat.hidden = true;
+  content.innerHTML = "";
+  if(state.view === "home"){
+    breadcrumb.innerHTML = `<span onclick="goHome()">🏠 Home</span>`;
+    content.appendChild(buildHero());
+    const label = document.createElement("div");
+    label.className = "section-label";
+    label.textContent = "scroll down to explore more.";
+    content.appendChild(label);
+    Object.keys(KB).forEach(cat=>{
+      const btn = document.createElement("div");
+      btn.className = "big-btn";
+      btn.dataset.category = cat;
+      btn.innerHTML = `<span><span class="icon">${KB[cat].icon}</span>${cat.replace(/^\S+\s/,"")}</span><span>›</span>`;
+      btn.onclick = ()=>openCategory(cat);
+      content.appendChild(btn);
+    });
+  }
+  else if(state.view === "resources"){
+    content.classList.add("resources-grid");
+    topicBackButton.textContent = "⬅ Back to Main Topics";
+    topicBackButton.onclick = returnToMainTopics;
+    topicBackFloat.hidden = false;
+    breadcrumb.innerHTML = `<span onclick="goHome()">🏠 Home</span> &nbsp;›&nbsp; Other Online Resources`;
+    const label = document.createElement("div");
+    label.className = "section-label";
+    label.textContent = "Select an online resource.";
+    content.appendChild(label);
+    const directLinkResources = new Set([
+      "EXAMS RULES & REGULATION",
+      "BECE GUIDELINES",
+      "EXAM TIMETABLE",
+      "RESULT ATTESTATION & STATUS",
+      "RESULT CONFIRMATION & STATUS",
+      "RESULT VERIFICATION",
+      "E-VERIFIER",
+      "FOREIGN EXAMINATIONS",
+      "EXAMINERS APPLICATION FORM",
+      "CHIEF EXAMINERS REPORT"
+    ]);
+
+    Object.keys(ONLINE_RESOURCES).forEach(name=>{
+      if(directLinkResources.has(name)){
+        const item = ONLINE_RESOURCES[name][0];
+        const link = document.createElement("a");
+        link.className = "waec-link unified-link resource-page-btn";
+        link.href = item.url;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.innerHTML = `<span>${name}</span><span>↗</span>`;
+        content.appendChild(link);
+      } else {
+        const btn = document.createElement("div");
+        btn.className = "waec-link unified-link resource-page-btn";
+        btn.innerHTML = `<span>${name}</span><span>›</span>`;
+        btn.onclick = ()=>openResourceCategory(name);
+        content.appendChild(btn);
+      }
+    });
+  }
+  else if(state.view === "resourceCategory"){
+    content.classList.add("resources-grid");
+    breadcrumb.innerHTML = `<span onclick="goHome()">🏠 Home</span> &nbsp;›&nbsp; <span onclick="openOtherResourcesPage()">Other Online Resources</span> &nbsp;›&nbsp; ${state.resourceCategory}`;
+    topicBackButton.textContent = "⬅ Back to Other Online Resources";
+    topicBackButton.onclick = openOtherResourcesPage;
+    topicBackFloat.hidden = false;
+    ONLINE_RESOURCES[state.resourceCategory].forEach(item=>{
+      if(item.dropdown){
+        const wrap = document.createElement("div");
+        wrap.className = "resource-dropdown";
+        const toggle = document.createElement("button");
+        toggle.type = "button";
+        toggle.className = "waec-link unified-link resource-page-btn";
+        toggle.innerHTML = `<span>${item.label}</span><span class="resource-chevron">＋</span>`;
+        const subList = document.createElement("div");
+        subList.className = "resource-sublist";
+        subList.hidden = true;
+        item.dropdown.forEach(sub=>{
+          const link = document.createElement("a");
+          link.className = "waec-link unified-link resource-page-btn";
+          link.href = sub.url;
+          link.target = "_blank";
+          link.rel = "noopener";
+          link.innerHTML = `<span>${sub.label}</span><span>↗</span>`;
+          subList.appendChild(link);
+        });
+        toggle.onclick = ()=>{
+          subList.hidden = !subList.hidden;
+          toggle.querySelector(".resource-chevron").textContent = subList.hidden ? "＋" : "−";
+        };
+        wrap.appendChild(toggle);
+        wrap.appendChild(subList);
+        content.appendChild(wrap);
+      } else {
+        const link = document.createElement("a");
+        link.className = "waec-link unified-link resource-page-btn";
+        link.href = item.url;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.innerHTML = `<span>${item.label}</span><span>↗</span>`;
+        content.appendChild(link);
+      }
+    });
+  }
+  else if(state.view === "category"){
+    content.classList.add("question-list-page");
+    topicBackButton.textContent = "⬅ Back to Main Topics";
+    topicBackButton.onclick = returnToMainTopics;
+    topicBackFloat.hidden = false;
+    breadcrumb.innerHTML = `<span onclick="goHome()">🏠 Home</span> &nbsp;›&nbsp; ${state.category}`;
+    KB[state.category].items.forEach(([q,a])=>{
+      const btn = document.createElement("div");
+      btn.className = "q-btn";
+      btn.textContent = q;
+      btn.onclick = ()=>openAnswer(q,a);
+      content.appendChild(btn);
+    });
+  }
+  else if(state.view === "answer"){
+    content.classList.add("answer-page");
+    breadcrumb.innerHTML = `<span onclick="goHome()">🏠 Home</span> &nbsp;›&nbsp; <span onclick="openCategory('${state.category}')">${state.category}</span>`;
+    const qBox = document.createElement("div");
+    qBox.className = "q-btn";
+    qBox.style.fontWeight = "700";
+    qBox.style.cursor = "default";
+    qBox.textContent = "❓ " + state.q;
+    content.appendChild(qBox);
+
+    const ans = document.createElement("div");
+    ans.className = "answer-box";
+    ans.textContent = state.a;
+    if(state.a.length < 60) ans.style.textAlign = "left";
+    content.appendChild(ans);
+
+    const nav = document.createElement("div");
+    nav.className = "nav-row";
+    nav.innerHTML = `
+      <button class="nav-btn secondary" onclick="returnToCategory()">⬅ Previous Page</button>
+      <button class="nav-btn" onclick="goHome()">🏠 Main Menu</button>`;
+    content.appendChild(nav);
+  }
+  else if(state.view === "search"){
+    topicBackButton.textContent = "⬅ Back to Main Topics";
+    topicBackButton.onclick = goHome;
+    topicBackFloat.hidden = false;
+    breadcrumb.innerHTML = `<span onclick="goHome()">🏠 Home</span> &nbsp;›&nbsp; Search Results`;
+    if(state.results.length===0){
+      const p = document.createElement("div");
+      p.className = "answer-box";
+      p.textContent = "No matching questions found. Try different words, or browse topics from Home.";
+      content.appendChild(p);
+    } else {
+      state.results.forEach(r=>{
+        const btn = document.createElement("div");
+        btn.className = "q-btn";
+        btn.textContent = r.q;
+        btn.onclick = ()=>openAnswer(r.q, r.a, r.cat);
+        content.appendChild(btn);
+      });
+    }
+  }
+  content.scrollTop = 0;
+  requestAnimationFrame(updatePhoneScrollbar);
+}
+
+function openOtherResources(){
+  state = { view:"resources" };
+  document.getElementById("searchBox").value="";
+  render();
+}
+function openOtherResourcesPage(){
+  state = { view:"resources" };
+  render();
+}
+function openResourceCategory(name){
+  state = { view:"resourceCategory", resourceCategory:name };
+  render();
+}
+
+function goHome(){ state = { view:"home" }; document.getElementById("searchBox").value=""; render(); }
+function returnToMainTopics(){
+  const category = state.category;
+  state = { view:"home" };
+  document.getElementById("searchBox").value="";
+  render();
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    const topic = Array.from(content.querySelectorAll(".big-btn"))
+      .find(button => button.dataset.category === category);
+    if(topic) topic.scrollIntoView({ block:"center", behavior:"auto" });
+  }));
+}
+function openCategory(cat){ state = { view:"category", category:cat }; render(); }
+function openAnswer(q,a,cat){
+  categoryReturnQuestion = q;
+  state = { view:"answer", category: cat || state.category, q, a };
+  render();
+}
+function returnToCategory(){
+  const category = state.category;
+  state = { view:"category", category };
+  render();
+  // render() resets scrollTop for other navigation. Wait for the rebuilt list
+  // to be laid out, then restore the selected question's position.
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    const selectedQuestion = Array.from(content.querySelectorAll(".q-btn"))
+      .find(button => button.textContent === categoryReturnQuestion);
+    if(selectedQuestion) selectedQuestion.scrollIntoView({ block:"center", behavior:"auto" });
+  }));
+}
+
+function handleSearch(text){
+  text = text.trim().toLowerCase();
+  if(text.length < 2){ if(state.view==="search") goHome(); return; }
+  const results = [];
+  Object.keys(KB).forEach(cat=>{
+    KB[cat].items.forEach(([q,a])=>{
+      if(q.toLowerCase().includes(text) || a.toLowerCase().includes(text)){
+        results.push({cat,q,a});
+      }
+    });
+  });
+  state = { view:"search", results };
+  render();
+}
+
+
+
+/* Ask for the browser's built-in confirmation when the tab or window is closed. */
+let exitConfirmed = false;
+window.addEventListener("beforeunload", function (event) {
+  if (!exitConfirmed) {
+    event.preventDefault();
+    event.returnValue = "";
+  }
+});
+
+/* ============ BACK-KEY GUARD ============ */
+// Exactly ONE guard history entry is ever kept. Each back press is caught,
+// the single guard entry is restored, and the exit dialog opens.
+let guardPushed = false;
+
+function addGuardOnce() {
+  if (guardPushed) return;
+  guardPushed = true;
+  window.history.pushState({ waecExitGuard: true }, "", window.location.href);
+  ["pointerdown", "touchstart", "click", "keydown"].forEach(function (ev) {
+    document.removeEventListener(ev, addGuardOnce, true);
+  });
+}
+// Mobile browsers ignore history entries added without a user touch,
+// so the guard is added on the first interaction.
+["pointerdown", "touchstart", "click", "keydown"].forEach(function (ev) {
+  document.addEventListener(ev, addGuardOnce, true);
+});
+
+let thanksShown = false;   // true once the thank-you screen is on display
+let leavingApp = false;
+window.addEventListener("popstate", function () {
+  if (thanksShown) { closeEverything(); return; }   // back key on thank-you screen
+  if (exitConfirmed) return;
+  // Restore the single guard entry so the next back press is caught too.
+  window.history.pushState({ waecExitGuard: true }, "", window.location.href);
+  showExitConfirmation();   // same dialog as the "Exit chatbot" button
+});
+
+/* ============ EXIT CONFIRMATION ============ */
+let exitTrigger = null;
+function showExitConfirmation(event) {
+  exitTrigger = event ? event.currentTarget : null;
+  const overlay = document.getElementById("exitOverlay");
+  const message = document.getElementById("exitDialogMessage");
+  message.textContent = "Are you sure you want to leave the WAEC Digital Assistant?";
+  overlay.classList.add("is-open");
+  overlay.setAttribute("aria-hidden", "false");
+  overlay.querySelector(".stay-btn").focus();
+}
+
+function cancelExit() {
+  const overlay = document.getElementById("exitOverlay");
+  overlay.classList.remove("is-open");
+  overlay.setAttribute("aria-hidden", "true");
+  if (exitTrigger) exitTrigger.focus();
+  else document.getElementById("searchExitButton").focus();
+}
+
+function confirmExit() {
+  exitConfirmed = true;            // stop the guard and beforeunload prompt
+  thanksShown = true;
+  document.title = "WAEC Digital Assistant";
+  document.body.style.alignItems = "center";
+  document.body.style.background = "#dff1ff";
+  document.body.innerHTML =
+    '<div style="width:100%;max-width:420px;margin:auto;padding:36px 26px;text-align:center;' +
+    'background:#fff;border:5px solid #ffd84d;border-radius:22px;box-shadow:0 6px 24px rgba(0,0,0,.15);' +
+    'font-family:\'Segoe UI\',Arial,sans-serif;">' +
+    '<div style="font-size:48px;margin-bottom:12px;">👋</div>' +
+    '<h2 style="color:#0052cc;font-size:20px;line-height:1.4;">' +
+    'Thank you for interacting with the WAEC Digital Assistant for your examination-related enquiries. We hope you found the information helpful. We look forward to assisting and serving you again.</h2>' +
+    '<div style="width:44px;height:4px;background:#d4a017;border-radius:4px;margin:16px auto 0;"></div>' +
+    '<button type="button" onclick="closeEverything()" aria-label="Close chatbot" style="margin-top:20px;background:#0052cc;color:#fff;border:0;border-radius:10px;padding:12px 28px;font-size:16px;font-weight:600;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.18);">Close</button>' +
+    '</div>';
+}
+
+// Called by the back key on the thank-you screen: leave the app completely.
+function closeEverything() {
+  if (leavingApp) return;
+  leavingApp = true;
+  // 1) Close the tab if the browser allows it.
+  try { window.close(); } catch (e) {}
+  // 2) Otherwise jump to the page before the app (the guard entry was just popped).
+  try { window.history.go(-1); } catch (e) {}
+  // 3) If there is no earlier page, open Google instead of a blank page.
+  window.setTimeout(function () {
+    if (window.closed) return;
+    try { window.location.replace("https://www.google.com"); } catch (e) {}
+  }, 300);
+}
+
+render();
+</script>
+</body>
+</html>
