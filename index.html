@@ -67,7 +67,8 @@
     box-shadow:0 2px 6px rgba(0,0,0,.18);
     transition: background .15s, transform .15s;
   }
-  .waec-link:hover { background:#ffe27a; transform:translateY(-1px); }\n  .waec-link { cursor:pointer; font-family:inherit; }
+  .waec-link:hover { background:#ffe27a; transform:translateY(-1px); }
+  .waec-link { cursor:pointer; font-family:inherit; }
   .unified-link { background:#ffd84d; border:2px solid #fff; }
   .unified-link:hover { background:#ffe27a; }
 
@@ -133,7 +134,13 @@
   .resource-sublist[hidden] { display:none; }
 
 
-  /* Other Online Resources: compact two-column buttons with blue edges */
+  #content.resources-grid > .section-label {
+    grid-column:1 / -1;
+    justify-self:center;
+    width:100%;
+    margin:0 0 2px;
+    text-align:center;
+  }  /* Other Online Resources: compact two-column buttons with blue edges */
   #content.resources-grid {
     display:grid;
     grid-template-columns:repeat(2, minmax(0, 1fr));
@@ -356,10 +363,11 @@ const KB = {
 "ℹ️ About WAEC": {
   icon:"ℹ️",
   items:[
-["What is WAEC?","The West African Examinations Council (WAEC) is a regional examination board established in 1952 to harmonize and administer pre-university assessments in English-speaking West Africa.\n \n Key Historical Milestones.\n• Origin (1948–1950): The idea arose from the need to replace British-administered examinations (such as the Cambridge and London exam boards) with a local system tailored to West African realities. Following a study by Dr. George Barker Jeffery (the Jeffery Report), a regional board was officially proposed.\n \n• Enactment (1951–1952): The colonial governments of the Gold Coast (now Ghana), Nigeria, Sierra Leone, and The Gambia passed the WAEC Ordinances in 1951, formally launching the council in 1952 with its headquarters in Accra, Ghana.\n \n • Expansion (1974): Liberia joined the council as its fifth member nation.\n \n • Legal Convention (1982/1984): Member states signed a new convention in 1982 (taking effect in 1984) to give WAEC full status as an independent international organization.The West African Examinations Council, responsible for standardized exams in West Africa."],
+["What is WAEC?","The West African Examinations Council (WAEC) is a regional examination board established in 1952 to harmonize and administer pre-university assessments in English-speaking West Africa.\n \n Key Historical Milestones.\n• Origin (1948–1950): The idea arose from the need to replace British-administered examinations (such as the Cambridge and London exam boards) with a local system tailored to West African realities. Following a study by Dr. George Barker Jeffery (the Jeffery Report), a regional board was officially proposed.\n \n• Enactment (1951–1952): The colonial governments of the Gold Coast (now Ghana), Nigeria, Sierra Leone, and The Gambia passed the WAEC Ordinances in 1951, formally launching the council in 1952 with its headquarters in Accra, Ghana.\n \n • Expansion (1974): Liberia joined the council as its fifth member nation.\n \n • Legal Convention (1982/1984): Member states signed a new convention in 1982 (taking effect in 1984) to give WAEC full status as an independent international organization. The West African Examinations Council, responsible for standardized exams in West Africa."],
 ["What does WAEC do?","Develops, conducts, and certifies exams like BECE, WASSCE, WASSCE PC, GBCE and ABCE. etc"],
 ["Who is the Head of the WAEC Ghana National Office?","Dr. (Mrs.) Rosemond Wilson, an experienced and accomplished educationist, mathematician and assessment specialist.\n \n She holds a BSc. in Mathematics from the KNUST, MSc. in Statistics and MA in Measurement and Evaluation from the University of Cape Coast. She also holds a PhD in Mathematics Education from the University of Education, Winneba."],
 ["Where can I find WAEC's Head Office?","WAEC Ghana's National Head Office is located at Ridge in Accra."],
+["Where can I find a WAEC office?","WAEC Ghana has its National Head Office at Ridge in Accra and regional offices across Ghana. Open the Regional Office Locations & Contacts topic to find the office serving your region."],
 ["What are WAEC's opening hours?","Generally Monday–Friday, standard office hours."],
 ["What is WAEC's official email?","WAEC Ghana's official email address is info@waecgh.org."],
 ["What examinations does WAEC conduct?","BECE, WASSCE (school & private), GBCE/ABCE, and more."],
@@ -430,6 +438,54 @@ const KB = {
 ["How do I obtain my registration number?","Issued by your school after successful registration, printed on your registration slip."],
 ["What happens if I lose my registration documents?","Contact your school to reissue documents or confirm your details on the WAEC portal."]
 ]},
+"🎓 Student Transcript Portal (STP)": {
+  icon:"🎓",
+  items:[
+["What is the Student Transcript Portal (STP)?","The Student Transcript Portal (STP) is an online platform developed to enable Senior High Schools (SHSs)   to manage students' academic records and character assessments. It provides a centralised system for recording students' academic performance, continuous assessments, grades, GPAs, and other relevant educational information."],
+["What is the purpose of the Student Transcript Portal?","The purpose of the STP is to provide a comprehensive record of students' academic progress and personal development throughout their Senior High School education. It supports effective assessment, academic monitoring, record management, and  transcript generation."],
+["Who uses the Student Transcript Portal?","The portal is primarily intended for Senior High Schools and authorised school personnel responsible for managing students' academic information, assessments, and transcripts."],
+["Who owns the Student Transcript Portal?","The Student Transcript Portal is owned by The West African Examinations Council, Ghana as part of the digitalisation of student  assessment and academic records."],
+["Which schools are expected to use the STP?","Senior High Schools implementing the new SHS curriculum are expected to use the Student Transcript Portal to manage and maintain students' academic records."],
+["Is the Student Transcript Portal available online?","Yes. The STP is accessible through the official WAEC Ghana online platform at \n\nhttps://stpshs.waecgh.org."],
+["What information does the Student Transcript Portal capture?","The portal captures several categories of student information, including:\n• Student  biodata.\n• Semester information.\n• Learning areas and subjects.\n• Subject combinations.\n• Assigned classes.\n• Continuous assessment records.\n• Credit hours.\n• Grades.\n• Grade Point Average (GPA).\n• Cumulative Grade Point Average (CGPA).\n• Students' character qualities and behavioural assessments."],
+["What is GPA?","GPA stands for Grade Point Average. It represents a student's academic performance over a particular semester or assessment period."],
+["What is CGPA?","CGPA stands for Cumulative Grade Point Average. It represents a student's overall academic performance accumulated over multiple semesters."],
+["What is continuous assessment in the STP?","Continuous assessment refers to the ongoing evaluation of students' academic performance through activities such as class exercises, assignments, projects, practical activities, and other approved assessment methods."],
+["Does the STP record students' behaviour and character?","Yes. The portal includes a qualitative assessment section where information about students' character qualities, attitudes, and personal development can be documented."],
+["Can the STP capture students' performance beyond examination scores?","Yes. The portal supports a broader assessment approach that considers students' academic performance, continuous assessments, projects, participation, and character development."],
+["Can students' academic records be monitored throughout their SHS education?","Yes. The STP provides a centralised record of students' academic progress from different semesters."],
+["How can a school access the Student Transcript Portal?","An authorised school user can access the portal through https://stpshs.waecgh.org using the appropriate login credentials provided for the school."],
+["How do I log in to the STP?","Visit https://stpshs.waecgh.org enter your authorised username and password, and follow the login instructions."],
+["What should I do if I forget my STP password?","Contact your school's authorised STP administrator or follow the password recovery instructions available on the portal, if provided."],
+["What should I do if I cannot access my STP account?","First, check your internet connection and ensure that your login credentials are correct. If the problem persists, contact your school's STP administrator or the appropriate WAEC support office."],
+["Can every teacher access the Student Transcript Portal?","Access is controlled through assigned user accounts, roles, and privileges. Teachers and other authorised personnel can access the functions assigned to their accounts."],
+["Can one school user access another school's records?","Access to student records is controlled by the system's user roles and privileges. Users should only access records they are authorised to manage."],
+["What activities can schools perform on the STP?","Schools can perform several activities through the portal, including:\n\n1. System user account management.\n2. Account management.\n3. Class setup and configuration.\n4. Student enrolment.\n5. Student data management.\n6. Assessment score capture.\n7. Qualitative assessment.\n8. Transcript and statement of result generation."],
+["Can schools enrol students through the STP?","Yes. Student enrolment is one of the modules available on the Student Transcript Portal. Authorised school personnel can use the module to manage student enrolment information."],
+["Can schools update students' personal information?","Yes. The Student Data Management module supports the management of students' biodata and other relevant academic information by authorised school users."],
+["Can teachers enter students' assessment scores?","Yes. The Assessment Score Capture module enables authorised personnel to record students' assessment scores."],
+["Can schools configure classes and subjects?","Yes. The portal provides Class Setup and Configuration facilities to support the organisation of classes and academic information."],
+["Can the school generate students' transcripts through the portal?","Yes. The portal includes a Transcript/Statement of Result module for generating   students' academic records."],
+["Can schools manage different user accounts?","Yes. The STP provides account management facilities that enable authorised administrators to manage user accounts, roles, and privileges."],
+["What is a student transcript?","A student transcript is an official academic record that provides information about a student's academic performance over a specified period of study."],
+["What is the difference between a transcript and a statement of result?","A transcript provides a comprehensive record of a student's academic performance over a period of study, while a statement of result presents the student's recorded results in a specified format."],
+["Can students obtain their academic transcripts from the STP?","The STP provides schools with facilities for transcript and statement of result generation. Students should contact their respective schools for guidance on accessing or obtaining their academic records."],
+["Can a student use an STP transcript for university admission?","A transcript may serve as an academic record when applying for further studies. However, students should confirm the specific transcript and certification requirements of the institution to which they are applying."],
+["What should I do if there is an error in my transcript?","Contact your school's administration and report the error. The school should verify the information and arrange for any necessary corrections through the appropriate authorised procedures."],
+["Can a student request corrections to their academic records?","Yes. Students who identify incorrect information should report it to their school administration for verification and appropriate action."],
+["What should I do if the STP website is not opening?","Check your internet connection, refresh the browser, or try accessing the portal using another supported browser. If the problem continues, contact your school's STP administrator or the appropriate WAEC support office."],
+["Why am I unable to log in to the STP?","Login problems may occur because of incorrect credentials, account restrictions, or temporary technical difficulties. Verify your username and password before contacting your school's system administrator."],
+["What should I do if I enter incorrect assessment scores?","Report the issue immediately to the authorised school administrator or relevant teacher responsible for assessment management so that the necessary verification and correction procedures can be followed."],
+["Can I access the STP using a mobile phone?","The STP is an online platform. You can attempt to access it using a compatible mobile browser with an internet connection. For administrative tasks, a computer may provide a more convenient experience."],
+["Is there an offline version of the STP?","No. The STP Offline version is under development."],
+["How can I check my academic progress on the STP?","Contact your school's administration or authorised personnel for assistance in accessing your academic records and understanding your progress."],
+["Can parents access their children's academic records?","Parents should contact their children's schools to establish the approved procedure for accessing academic progress information."],
+["Does the STP replace the WASSCE examination?","No. The Student Transcript Portal supports the management of students' academic records and assessments. It does not replace the WASSCE examination."],
+["Does the STP only record examination results?","No. The STP captures a wider range of academic information, including continuous assessments, grades, credit hours, GPAs, CGPAs, and qualitative assessments."],
+["Why is the STP important to students?","The STP provides a comprehensive record of students' academic achievements and personal development. It encourages consistent learning, supports academic monitoring, and helps schools maintain reliable student records."],
+["Why is the STP important to parents?","The STP supports a broader understanding of students' academic development by providing information beyond examination scores, including continuous assessments and qualitative aspects of learning."],
+["Why is the STP important to tertiary institutions?","The STP can provide a broader picture of a student's academic journey and development, helping institutions understand applicants' academic achievements and other documented learning attributes."]
+]},
 "👤 WASSCE Private Examination (1st & 2nd Series)": {
   icon:"👤",
   items:[
@@ -451,6 +507,7 @@ const KB = {
   icon:"📘",
   items:[
 ["What is BECE?","The Basic Education Certificate Examination is taken at the end of Junior High School."],
+["How do I register for BECE?","School candidates register through their recognized Junior High School during the period announced by WAEC. Private candidates register online through WAEC's Unified portal; see the BECE Private Examination topic for the steps and eligibility requirements."],
 ["When is BECE registration?","Announced yearly and registration is done through the candidate's Junior High School. LATE registration is highly discouraged "],
 ["What are the BECE registration requirements?","Registration is done through a recognized Junior High School with bio-data and photos.\n \n1. A Candidate should have completed JHS 1, 2 and 3.\n \n2. A candidate MUST have Continuous Assessment scores entered for ALL the three years in School.\n \n3. Bio-data corrections made during registration must be completed within a specified time frame. "],
 ["What subjects are offered?","Core subjects plus electives like French, Computing, etc."],
@@ -613,6 +670,7 @@ const KB = {
 ["When will the WASSCE results be released?","Announced via media, waecgh.org, and schools; dates vary yearly."],
 ["Have the WASSCE results been released?","Check waecgh.org or official WAEC announcements."],
 ["Where can I check my results?","Via WAEC's online results-checker portal using a PIN and index number."],
+["How can I check my WASSCE results?","Use WAEC's online results-checker portal with your index number and a valid results-checker PIN."],
 ["How do I check my results online?","Visit the checker page, enter index number, year, and PIN, then submit."],
 ["Can I check my results with my phone?","Yes, via a browser, or USSD/SMS where available."],
 ["How much does checking results cost?","A fee applies for the results checker PIN, sold at approved vendors."],
@@ -761,6 +819,7 @@ const KB = {
 ["How much does a results checker cost?","Set by WAEC yearly — available at approved vendors."],
 ["How much does certificate replacement cost?","Check the current WAEC fee schedule."],
 ["How much does result verification cost?","Varies by request type — check with WAEC."],
+["Where can I find WAEC's rates for its services?","Visit WAEC's official Rates for Our Services page for the applicable charges: https://waecgh.org/our-services/"],
 ["What payment methods does WAEC accept?","Approved banks, Mobile Money, and sometimes online card payments."],
 ["Can I pay with Mobile Money?","Yes, generally accepted for many services."],
 ["Can I pay with bank transfer?","Yes, via designated WAEC bank accounts."],
@@ -820,12 +879,39 @@ const KB = {
 ]}
 };
 
+/* ============ FAQ CANONICALISATION ============
+   Keep category navigation intact, but make repeated FAQ questions share one
+   approved answer so search results cannot return conflicting versions. */
+function normaliseFaqKey(value){
+  return String(value || "").toLowerCase().replace(/&/g," and ")
+    .replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim();
+}
+const CANONICAL_FAQ_ANSWERS = {
+  "what is bece": "The Basic Education Certificate Examination (BECE) is taken at the end of Junior High School (JHS).",
+  "what is abce": "ABCE means Advanced Business Certificate Examination. It is a WAEC examination designed to prepare candidates for the world of work and further academic studies.",
+  "what is gbce": "GBCE means General Business Certificate Examination.",
+  "how much does wassce registration cost": "WASSCE registration fees are set annually by WAEC and the Ministry of Education. School candidates should confirm the current amount with their school or through WAEC's official channels.",
+  "can i change my examination centre": "A change of examination centre is permitted only in exceptional circumstances and is subject to WAEC's rules and approval. Requests should be made through the candidate's school before the examination, where applicable. A change should not be assumed to be automatic.",
+  "where is my examination centre": "Your examination centre is indicated on your registration slip or examination card. School candidates should obtain the relevant information from their school.",
+  "how do i appeal a malpractice decision": "Submit a formal written appeal with supporting evidence within the appeal period specified by WAEC. The appeal will be considered through the applicable WAEC procedure.",
+  "how much does certificate replacement cost": "Certificate replacement charges are subject to WAEC's current fee schedule. Check the Rates for Our Services page or contact a WAEC office for the applicable charge.",
+  "can an embassy verify my certificate": "Yes. An embassy may request verification directly from WAEC, subject to the applicable verification process and requirements."
+};
+(function harmoniseDuplicateFaqAnswers(){
+  for(const category of Object.keys(KB)){
+    KB[category].items = KB[category].items.map(([question,answer])=>{
+      const canonical = CANONICAL_FAQ_ANSWERS[normaliseFaqKey(question)];
+      return [question, canonical || answer];
+    });
+  }
+})();
+
 /* ============ OTHER ONLINE RESOURCES ============ */
 const ONLINE_RESOURCES = {
   "EXAMS REGISTRATION": [
     { label:"Register for BECE School", url:"https://www.waecinternetsolution.org/" },
     { label:"Register for BECE Private", url:"https://unified.ghanawaec.org/Home/GeneralInformation/BECE" },
-    { label:"Register for WASSCE School", url:"https://www.waecinternetsolution.org/" },
+    { label:"Register for WASSCE School", url:"https://stpshs.waecgh.org/Login.aspx" },
     { label:"Register for WASSCE Private", dropdown:[
       { label:"PC 1st Series Exams", url:"https://unified.ghanawaec.org/Home/GeneralInformation/WASSCE" },
       { label:"PC 2nd Series Exams", url:"https://unifiedstaging.ghanawaec.org/Home/GeneralInformation/WASSCE" }
@@ -844,7 +930,7 @@ const ONLINE_RESOURCES = {
     { label:"ABCE Results", url:"https://ghana.waecdirect.org/" },
     { label:"GBCE Results", url:"https://ghana.waecdirect.org/" }
   ],
-  "BECE GUIDELINES": [
+  "BECE GUIDELINES, SCHEME AND STRUCTURE": [
     { label:"BECE Guidelines", url:"https://waecgh.org/bece-guidelines-scheme-and-structure/" }
   ],
   "EXAM TIMETABLE": [
@@ -919,6 +1005,31 @@ function buildHero(){
   return hero;
 }
 
+function appendAnswerWithLinks(container, answerText){
+  /* Render FAQ answers as text and turn web addresses into safe, clickable links. */
+  const urlPattern = /https?:\/\/[^\s<]+|www\.[^\s<]+|(?:[a-z0-9-]+\.)+(?:com|org|net|edu|gov|gh)(?:\/[^\s<]*)?/gi;
+  let lastIndex = 0;
+  let match;
+  while((match = urlPattern.exec(answerText)) !== null){
+    let rawUrl = match[0];
+    let trailing = "";
+    while(/[),.;!?]$/.test(rawUrl)){
+      trailing = rawUrl.slice(-1) + trailing;
+      rawUrl = rawUrl.slice(0, -1);
+    }
+    if(match.index > lastIndex) container.appendChild(document.createTextNode(answerText.slice(lastIndex, match.index)));
+    const link = document.createElement("a");
+    link.href = /^https?:\/\//i.test(rawUrl) ? rawUrl : "https://" + rawUrl;
+    link.textContent = rawUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    container.appendChild(link);
+    if(trailing) container.appendChild(document.createTextNode(trailing));
+    lastIndex = match.index + match[0].length;
+  }
+  if(lastIndex < answerText.length) container.appendChild(document.createTextNode(answerText.slice(lastIndex)));
+}
+
 function render(){
   content.classList.remove("question-list-page", "answer-page", "resources-grid");
   topicBackFloat.hidden = true;
@@ -947,8 +1058,16 @@ function render(){
     breadcrumb.innerHTML = `<span onclick="goHome()">🏠 Home</span> &nbsp;›&nbsp; Other Online Resources`;
     const label = document.createElement("div");
     label.className = "section-label";
-    label.textContent = "Select an online resource.";
+    label.textContent = "Select an online resource";
     content.appendChild(label);
+
+    const stpLink = document.createElement("a");
+    stpLink.className = "waec-link unified-link resource-page-btn";
+    stpLink.href = "https://waecgh.org/our-services/";
+    stpLink.target = "_blank";
+    stpLink.rel = "noopener";
+    stpLink.innerHTML = `<span>RATES FOR OUR SERVICES</span><span>↗</span>`;
+    content.appendChild(stpLink);
     const directLinkResources = new Set([
       "EXAMS RULES & REGULATION",
       "BECE GUIDELINES",
@@ -1051,7 +1170,7 @@ function render(){
 
     const ans = document.createElement("div");
     ans.className = "answer-box";
-    ans.textContent = state.a;
+    appendAnswerWithLinks(ans, state.a);
     if(state.a.length < 60) ans.style.textAlign = "left";
     content.appendChild(ans);
 
@@ -1131,22 +1250,323 @@ function returnToCategory(){
   }));
 }
 
-function handleSearch(text){
-  text = text.trim().toLowerCase();
-  if(text.length < 2){ if(state.view==="search") goHome(); return; }
-  const results = [];
-  Object.keys(KB).forEach(cat=>{
-    KB[cat].items.forEach(([q,a])=>{
-      if(q.toLowerCase().includes(text) || a.toLowerCase().includes(text)){
-        results.push({cat,q,a});
-      }
+/* ============ UNIFIED INTENT-BASED SEARCH ============ */
+/* STP intents map common ways of asking a question to the existing STP FAQ. */
+const STP_INTENTS = [
+  { intent:"STP_GENERAL", aliases:["what is stp","what is student transcript portal","what does stp mean","about stp","explain stp","student transcript portal"], question:"What is the Student Transcript Portal (STP)?" },
+  { intent:"STP_PURPOSE", aliases:["purpose of stp","what is the purpose of stp","why was stp created"], question:"What is the purpose of the Student Transcript Portal?" },
+  { intent:"STP_OWNER", aliases:["who owns stp","who is responsible for stp","who manages stp"], question:"Who owns the Student Transcript Portal?" },
+  { intent:"STP_SCHOOLS", aliases:["which schools are expected to use stp","schools expected to use stp"], question:"Which schools are expected to use the STP?" },
+  { intent:"STP_ONLINE", aliases:["is stp available online","is the student transcript portal online","stp online access"], question:"Is the Student Transcript Portal available online?" },
+  { intent:"STP_TEACHER_ACCESS", aliases:["can every teacher access stp","can all teachers access stp","teacher access to stp"], question:"Can every teacher access the Student Transcript Portal?" },
+  { intent:"STP_PROGRESS", aliases:["how can i check my academic progress on stp","check academic progress on stp","track my progress on stp"], question:"How can I check my academic progress on the STP?" },
+  { intent:"STP_EXAM_ONLY", aliases:["does stp only record examination results","does stp only record exam results","stp examination results only"], question:"Does the STP only record examination results?" },
+  { intent:"STP_STUDENT_IMPORTANCE", aliases:["why is stp important to students","importance of stp to students"], question:"Why is the STP important to students?" },
+  { intent:"STP_PARENT_IMPORTANCE", aliases:["why is stp important to parents","importance of stp to parents"], question:"Why is the STP important to parents?" },
+  { intent:"STP_INSTITUTION_IMPORTANCE", aliases:["why is stp important to tertiary institutions","importance of stp to tertiary institutions"], question:"Why is the STP important to tertiary institutions?" },
+  { intent:"STP_USERS", aliases:["who uses stp","who can use stp","which schools use stp","schools expected to use stp","who is stp for","who uses student transcript portal","who can use student transcript portal"], question:"Who uses the Student Transcript Portal?" },
+  { intent:"STP_ACCESS", aliases:["how do i access stp","stp website","stp portal link","where is stp","open stp portal","visit stp"], question:"How can a school access the Student Transcript Portal?" },
+  { intent:"STP_LOGIN", aliases:["how to log in to stp","how do i login","sign in to stp","stp login"], question:"How do I log in to the STP?" },
+  { intent:"STP_PASSWORD", aliases:["i have forgotten my stp password","i have forgotten my password","i forgot my stp password","i forgot my password","forgotten stp password","forgot my password","forgot stp password","reset stp password","how do i reset my stp password","change stp password","password recovery","cannot remember my stp password","cannot remember password"], question:"What should I do if I forget my STP password?" },
+  { intent:"STP_ACCOUNT", aliases:["cannot access my account","stp account problem","account locked","teacher access","user roles","school records access"], question:"What should I do if I cannot access my STP account?" },
+  { intent:"STP_RECORDS", aliases:["what information is captured","student biodata","academic records","student information","what does stp record","student data"], question:"What information does the Student Transcript Portal capture?" },
+  { intent:"STP_GPA", aliases:["what is gpa","meaning of gpa","grade point average","explain gpa"], question:"What is GPA?" },
+  { intent:"STP_CGPA", aliases:["what is cgpa","meaning of cgpa","cumulative grade point average","explain cgpa"], question:"What is CGPA?" },
+  { intent:"STP_ASSESSMENT", aliases:["continuous assessment","class exercises","assignments and projects","assessment scores","assessment in stp"], question:"What is continuous assessment in the STP?" },
+  { intent:"STP_CHARACTER", aliases:["does stp record behaviour","character assessment","student behaviour","qualitative assessment"], question:"Does the STP record students' behaviour and character?" },
+  { intent:"STP_MONITORING", aliases:["monitor academic progress","track student progress","records throughout shs","academic progress"], question:"Can students' academic records be monitored throughout their SHS education?" },
+  { intent:"STP_SCHOOL_ADMIN", aliases:["what can schools do on stp","school administration","stp modules","school activities"], question:"What activities can schools perform on the STP?" },
+  { intent:"STP_ENROLMENT", aliases:["enrol students","student enrolment","register students on stp"], question:"Can schools enrol students through the STP?" },
+  { intent:"STP_SCORE_CAPTURE", aliases:["enter scores","capture scores","teachers enter marks","record assessment scores"], question:"Can teachers enter students' assessment scores?" },
+  { intent:"STP_TRANSCRIPT", aliases:["what is a transcript","student transcript","generate transcript","get my transcript","obtain transcript"], question:"What is a student transcript?" },
+  { intent:"STP_STATEMENT", aliases:["statement of result","difference between transcript and statement","transcript versus statement"], question:"What is the difference between a transcript and a statement of result?" },
+  { intent:"STP_TRANSCRIPT_ACCESS", aliases:["can students get transcript","download transcript","how to obtain academic transcript","how do i obtain a transcript","obtain my transcript","request a transcript","get transcript from stp"], question:"Can students obtain their academic transcripts from the STP?" },
+  { intent:"STP_ADMISSION", aliases:["use transcript for university","university admission transcript","tertiary admission"], question:"Can a student use an STP transcript for university admission?" },
+  { intent:"STP_CORRECTION", aliases:["wrong transcript","incorrect academic record","correct student results","mistake in transcript","change student records"], question:"What should I do if there is an error in my transcript?" },
+  { intent:"STP_TROUBLESHOOTING", aliases:["website not opening","stp not loading","portal not working","cannot open stp"], question:"What should I do if the STP website is not opening?" },
+  { intent:"STP_LOGIN_ERROR", aliases:["unable to log in","login problem","invalid password","login failed"], question:"Why am I unable to log in to the STP?" },
+  { intent:"STP_WRONG_SCORES", aliases:["entered wrong scores","incorrect assessment scores","mistake entering marks"], question:"What should I do if I enter incorrect assessment scores?" },
+  { intent:"STP_MOBILE", aliases:["use stp on phone","mobile phone access","stp android","stp mobile"], question:"Can I access the STP using a mobile phone?" },
+  { intent:"STP_OFFLINE", aliases:["offline stp","stp offline app","use stp without internet","no internet stp"], question:"Is there an offline version of the STP?" },
+  { intent:"STP_PARENTS", aliases:["can parents see results","parent access","parents academic records","check my child's academic progress"], question:"Can parents access their children's academic records?" },
+  { intent:"STP_WASSCE", aliases:["does stp replace wassce","stp and wassce","is stp an examination"], question:"Does the STP replace the WASSCE examination?" }
+];
+
+function normaliseSearchText(value){
+  return String(value || "").toLowerCase()
+    .replace(/&/g," and ")
+    .replace(/\b(isn.t|isnt)\b/g,"is not")
+    .replace(/\b(doesn.t|doesnt)\b/g,"does not")
+    .replace(/\b(don.t|dont)\b/g,"do not")
+    .replace(/\b(can.t|cant)\b/g,"cannot")
+    .replace(/\b(won.t|wont)\b/g,"will not")
+    .replace(/\b(didn.t|didnt)\b/g,"did not")
+    .replace(/\b(hasn.t|hasnt)\b/g,"has not")
+    .replace(/\b(haven.t|havent)\b/g,"have not")
+    .replace(/\b(aren.t|arent)\b/g,"are not")
+    .replace(/\b(wasn.t|wasnt)\b/g,"was not")
+    .replace(/\b(weren.t|werent)\b/g,"were not")
+    .replace(/\bforgotten\b/g,"forgot")
+    .replace(/[^a-z0-9\s]/g," ")
+    .replace(/\s+/g," ").trim();
+}
+const INTENT_STOP_WORDS = new Set([
+  "what","whom","which","can","cannot","does","is","could","would","should","do","did","are","was","were","the","a","an","and","or","to","for","of","in","on","at","my","me","i","we","you","your","it","this","that","from","with","about","please","tell","explain","get","know","want","need","there","any","much","many","how","who","when","where","why","which","am","be","been","being","have","has","had","their","them","they","he","she","his","her","our","us","all","some","more","not","no","waec","service","services","doesnt","dont","isnt","wasnt","were","wouldnt","couldnt","shouldnt"
+]);
+const INTENT_SYNONYMS = {
+  exam:"examination", exams:"examination", examinations:"examination", test:"examination", tests:"examination",
+  rate:"fee", rates:"fee", pricing:"fee", amount:"fee", amounts:"fee", payable:"fee", payment:"payment", payments:"payment", pay:"payment", paid:"payment", purchase:"buy",
+  register:"registration", registered:"registration", registering:"registration", enrol:"registration", enroll:"registration", enrolment:"registration", enrollment:"registration",
+  mark:"marking", marked:"marking", marks:"marking", grade:"result", grades:"result", scores:"result", score:"result", results:"result",
+  certificate:"certificate", certificates:"certificate", cert:"certificate", certs:"certificate",
+  fee:"fee", fees:"fee", cost:"fee", costs:"fee", price:"fee", prices:"fee", charge:"fee", charges:"fee", pricing:"fee",
+  branch:"office", branches:"office", regional:"region", regions:"region", location:"address", locations:"address", located:"address", contact:"phone", telephone:"phone", call:"phone", email:"email",
+  checker:"result checker", checkers:"result checker", malfunction:"problem", failing:"problem", failure:"problem", working:"work",
+  login:"access", logins:"access", signin:"access", sign:"access", password:"password", forgotten:"forgot", forget:"forgot", forgot:"forgot", checking:"check", checked:"check", checks:"check",
+  fake:"scam", fraud:"scam", fraudulent:"scam", cheat:"malpractice", cheating:"malpractice",
+  independent:"private", candidates:"candidate", pupils:"student", children:"student", child:"student", parents:"parent", guardians:"parent",
+  timetable:"schedule", date:"schedule", dates:"schedule", time:"schedule", times:"schedule", appeal:"complaint", complain:"complaint", complaints:"complaint",
+  verify:"check", verified:"check", checking:"check", authenticate:"verification", authentic:"verification", authenticated:"verification",
+  jhs:"bece", junior:"bece", shs:"wassce", senior:"wassce", transcript:"transcript", transcripts:"transcript",
+  schools:"school", students:"student", teachers:"teacher", centres:"centre", centers:"centre", centre:"centre", center:"centre",
+  opening:"open", hours:"hour", working:"work", available:"availability", availability:"availability", obtain:"obtain", receive:"obtain", collect:"collection", collected:"collection",
+  document:"information", documents:"information", required:"requirement", requirements:"requirement"
+};
+function intentTokens(value){
+  const normal=normaliseSearchText(value);
+  const tokens=normal.split(" ")
+    .filter(w=>w.length>1 && !INTENT_STOP_WORDS.has(w))
+    .map(w=>INTENT_SYNONYMS[w] || (w.length>4 && w.endsWith("ies") ? w.slice(0,-3)+"y" : w.length>4 && w.endsWith("s") && !w.endsWith("ss") ? w.slice(0,-1) : w));
+  /* "How can I pay?" asks for a payment method even when the word "method"
+     is not present in the user's wording. */
+  if(/\b(how|way|ways)\b/.test(normal) && /\b(pay|payment|payments)\b/.test(normal) && !tokens.includes("method")) tokens.push("method");
+  return tokens;
+}
+function findStpIntent(query){
+  const normalQuery = normaliseSearchText(query);
+  if(!/\bstp\b|\btranscript\b|\bcgpa\b|\bgpa\b|student transcript portal/.test(normalQuery)) return null;
+  const queryWords = new Set(intentTokens(normalQuery));
+  if(queryWords.size === 0) return null;
+  let best = null, bestScore = 0;
+  STP_INTENTS.forEach(entry=>{
+    [...entry.aliases, entry.question].forEach(candidate=>{
+      const normalCandidate = normaliseSearchText(candidate);
+      const candidateWords = new Set(intentTokens(normalCandidate));
+      const hasStpMarker = /\bstp\b|\btranscript\b|\bcgpa\b|\bgpa\b|student transcript portal/.test(normalQuery);
+      if(["STP_PASSWORD","STP_ACCOUNT","STP_LOGIN","STP_LOGIN_ERROR"].includes(entry.intent) && !/\bstp\b/.test(normalQuery)) return;
+      const exactPhrase = normalQuery === normalCandidate || (normalQuery.length >= 7 && normalQuery.includes(normalCandidate));
+      const partialPhrase = queryWords.size >= 2 && normalCandidate.includes(normalQuery);
+      const overlap = [...queryWords].filter(w=>candidateWords.has(w)).length;
+      const score = exactPhrase ? 2 + normalCandidate.length/1000 : partialPhrase ? 1.5 + normalQuery.length/1000 : overlap / Math.max(queryWords.size,candidateWords.size,1) + (hasStpMarker && overlap ? 0.25 : 0);
+      if(score > bestScore){ bestScore=score; best=entry; }
     });
   });
-  state = { view:"search", results };
-  render();
+  return bestScore >= 0.58 ? best : null;
 }
 
+/* Keep examination-specific searches inside the examination named by the user. */
+function isKbContextCompatible(query, category, question){
+  const normalQuery=normaliseSearchText(query);
+  const targetText=normaliseSearchText(category+" "+question);
+  if(/\bstp\b|student transcript portal/.test(normalQuery) && !/student transcript portal/.test(targetText)) return false;
+  const examMarkers=["wassce","bece","gbce","abce"].filter(marker=>new RegExp("\\b"+marker+"\\b").test(normalQuery));
+  if(examMarkers.some(marker=>!new RegExp("\\b"+marker+"\\b").test(targetText))) return false;
+  if(/\b(private|independent)\b/.test(normalQuery) && /\b(wassce|bece|gbce|abce)\b/.test(targetText) && !/\b(private|independent)\b/.test(targetText)) return false;
+  if(/\bschool\b/.test(normalQuery) && /\bprivate\b/.test(targetText) && !/\bschool\b/.test(targetText)) return false;
+  return true;
+}
+/* Rank FAQ candidates using normalized language, synonym-aware token overlap,
+   rare-term weighting, examination context and typo tolerance. The best result
+   is selected consistently; close alternatives are shown only when useful. */
+function findGeneralKbMatches(query){
+  const normalQuery=normaliseSearchText(query);
+  const queryTokens=[...new Set(intentTokens(normalQuery))];
+  if(!normalQuery || queryTokens.length===0) return [];
 
+  const targets=[];
+  const documentFrequency=new Map();
+  for(const category of Object.keys(KB)){
+    for(const [question,answer] of KB[category].items){
+      const qTokens=[...new Set(intentTokens(question))];
+      const catTokens=[...new Set(intentTokens(category))].filter(token=>!qTokens.includes(token));
+      const allTokens=[...new Set([...qTokens,...catTokens])];
+      allTokens.forEach(token=>documentFrequency.set(token,(documentFrequency.get(token)||0)+1));
+      targets.push({cat:category,q:question,a:answer,qTokens,catTokens});
+    }
+  }
+  const total=Math.max(targets.length,1);
+  const weight=token=>1+Math.log(1+(total+1)/((documentFrequency.get(token)||0)+1));
+  const queryWeight=queryTokens.reduce((sum,token)=>sum+weight(token),0);
+  const scored=[];
+
+  for(const target of targets){
+    if(!isKbContextCompatible(query,target.cat,target.q)) continue;
+    const normalQuestion=normaliseSearchText(target.q);
+    let exact=normalQuery===normalQuestion;
+    let phrase=normalQuery.length>=5 && normalQuestion.includes(normalQuery);
+    const matched=[];
+    for(const token of queryTokens){
+      if(target.qTokens.includes(token)){matched.push(token);continue;}
+      if(token.length>=6 && target.qTokens.some(candidate=>candidate.length>=6 && editDistanceAtMostOne(token,candidate))) matched.push(token);
+    }
+    const categoryMatched=queryTokens.filter(token=>!matched.includes(token)&&target.catTokens.includes(token));
+    const support=matched.reduce((sum,token)=>sum+weight(token),0)+categoryMatched.reduce((sum,token)=>sum+weight(token)*0.22,0);
+    const queryCoverage=support/Math.max(queryWeight,1);
+    const targetWeight=target.qTokens.reduce((sum,token)=>sum+weight(token),0)+target.catTokens.reduce((sum,token)=>sum+weight(token)*0.22,0);
+    const targetCoverage=Math.min(1,support/Math.max(targetWeight,1));
+    const harmonic=(2*queryCoverage*targetCoverage)/Math.max(queryCoverage+targetCoverage,0.001);
+    let score=harmonic;
+    if(exact) score=2;
+    else if(phrase) score=Math.max(score,1.5+(normalQuery.length/10000));
+    else {
+      /* Prefer the question text over broad category-only overlap. */
+      score += matched.length ? 0.035 : 0;
+      /* Definitions should win when a user asks a concise "what is [exam]" query. */
+      if(/^what is /.test(normalQuery) && /^what is /.test(normalQuestion)) score+=0.08;
+    }
+    if(matched.length===0 && categoryMatched.length===0) continue;
+    if(queryTokens.length===1 && matched.length===1) score+=0.04;
+    scored.push({...target,score,queryCoverage,exact});
+  }
+
+  scored.sort((a,b)=>b.score-a.score || b.queryCoverage-a.queryCoverage || b.a.length-a.a.length);
+  if(!scored.length) return [];
+  const best=scored[0];
+  if(!best.exact && best.score<0.30) return [];
+  if(!best.exact && best.queryCoverage<0.42) return [];
+
+  /* Collapse normalized duplicate questions, preferring the strongest contextual match. */
+  const unique=[];
+  const seen=new Map();
+  for(const item of scored){
+    if(!item.exact && (item.score<Math.max(0.30,best.score*0.68) || item.queryCoverage<0.35)) continue;
+    const key=normaliseFaqKey(item.q);
+    if(!seen.has(key)){seen.set(key,unique.length);unique.push(item);}
+    else {
+      const index=seen.get(key);
+      if(item.score>unique[index].score) unique[index]=item;
+    }
+    if(unique.length>=5) break;
+  }
+  return unique;
+}
+function findGeneralKbIntent(query){
+  const matches=findGeneralKbMatches(query);
+  return matches.length ? {...matches[0],score:matches[0].exact?1:matches[0].score} : null;
+}
+function editDistanceAtMostOne(a,b){
+  if(Math.abs(a.length-b.length)>1) return false;
+  let i=0,j=0,edits=0;
+  while(i<a.length && j<b.length){
+    if(a[i]===b[j]){i++;j++;continue;}
+    if(++edits>1) return false;
+    if(a.length>b.length)i++; else if(b.length>a.length)j++; else {i++;j++;}
+  }
+  if(i<a.length || j<b.length) edits++;
+  return edits<=1;
+}
+function isGeneralServiceRatesQuery(normalQuery){
+  return /\b(rate|rates|pricing|prices|charge|charges|cost|costs|fee|fees|price)\b/.test(normalQuery);
+}
+function findExamRegistrationIntent(query){
+  const normalQuery=normaliseSearchText(query);
+  if(/\b(cost|costs|fee|fees|price|prices|rate|rates|payment|pay)\b/.test(normalQuery)) return null;
+  if(!/\b(how|where|steps|process|want|need)\b/.test(normalQuery)) return null;
+  if(!/\b(register|registration|enrol|enroll)\b/.test(normalQuery)) return null;
+  const exam=(normalQuery.match(/\b(wassce|bece|gbce|abce)\b/)||[])[1];
+  if(!exam) return null;
+  const isPrivate=/\b(private|independent|pc)\b/.test(normalQuery);
+  const category=Object.keys(KB).find(cat=>{
+    const t=normaliseSearchText(cat);
+    return t.includes(exam) && (isPrivate ? /\bprivate\b/.test(t) : /\bschool\b/.test(t));
+  });
+  if(!category) return null;
+  const preferred=KB[category].items.find(([q])=>/\bregister\b/i.test(q) && (exam!=="wassce" || !isPrivate || /WASSCE PC/i.test(q) || /^How do I register\?$/i.test(q)));
+  if(!preferred) return null;
+  return {cat:category,q:preferred[0],a:preferred[1]};
+}
+function handleSearch(text){
+  const rawText=String(text || "").trim();
+  const normalQuery=normaliseSearchText(rawText);
+  if(normalQuery.length<2){if(state.view==="search") goHome();return;}
+
+  const results=[];
+  const resultIndex=new Map();
+  const addResult=(item)=>{
+    if(!item) return;
+    const key=normaliseFaqKey(item.q);
+    if(resultIndex.has(key)){
+      const index=resultIndex.get(key);
+      /* Same question in multiple categories: keep the answer already
+         canonicalised and retain the best contextual category match. */
+      if(item.score && (!results[index].score || item.score>results[index].score)){
+        results[index]={...item,a:CANONICAL_FAQ_ANSWERS[key] || item.a};
+      }
+      return;
+    }
+    resultIndex.set(key,results.length);
+    results.push(item);
+  };
+
+  const rankedMatches=findGeneralKbMatches(rawText);
+  const exactKbMatch=rankedMatches.find(item=>item.exact);
+  /* An exact FAQ question always outranks broad intents and generic fallback
+     destinations. This protects detailed STP and fee questions from being
+     replaced by a more general answer. */
+  if(exactKbMatch) addResult(exactKbMatch);
+
+  const matchedStpIntent=exactKbMatch ? null : findStpIntent(rawText);
+  if(matchedStpIntent){
+    const stpCategory="🎓 Student Transcript Portal (STP)";
+    const match=KB[stpCategory].items.find(([q])=>q===matchedStpIntent.question);
+    if(match) addResult({cat:stpCategory,q:match[0],a:match[1],score:2});
+  }
+
+  const examRegistrationIntent=exactKbMatch ? null : findExamRegistrationIntent(rawText);
+  if(examRegistrationIntent) addResult({...examRegistrationIntent,score:1.8});
+
+  const feeContext=/\b(wassce|bece|gbce|abce|registration|register|checker|certificate|verification|result|results|transcript|examination)\b/.test(normalQuery);
+  const exactFeeMatch=!!(exactKbMatch && /\b(fee|fees|cost|costs|price|prices|charge|charges)\b/.test(normaliseSearchText(exactKbMatch.q)));
+  const specificFeeMatch=exactFeeMatch || (feeContext && rankedMatches.some(item=>{
+    const question=normaliseSearchText(item.q);
+    const feeQuestion=/\b(fee|fees|cost|costs|price|prices|charge|charges)\b/.test(question);
+    const namedExam=(normalQuery.match(/\b(wassce|bece|gbce|abce)\b/)||[])[1];
+    return feeQuestion && (!namedExam || new RegExp("\\b"+namedExam+"\\b").test(question));
+  }));
+
+  /* Put the official service-rates destination first when the user asks a
+     broad pricing question or names an exam/service with no matching fee FAQ. */
+  const useRatesFallback=isGeneralServiceRatesQuery(normalQuery) && !specificFeeMatch;
+  if(useRatesFallback){
+    const feesCategory="💰 Examination Fees & Payments";
+    const ratesFaq=KB[feesCategory].items.find(([q])=>q==="Where can I find WAEC's rates for its services?");
+    if(ratesFaq) addResult({cat:feesCategory,q:ratesFaq[0],a:ratesFaq[1],score:2.1});
+  }
+  const isFeeSearch=/\b(rate|rates|pricing|prices|charge|charges|cost|costs|fee|fees|price)\b/.test(normalQuery);
+  const isTroubleshootingQuery=/\b(problem|problems|error|errors|issue|issues|not working|failed|failure|unable|cannot|invalid|loading|stuck|crash)\b/.test(normalQuery);
+  rankedMatches.forEach(match=>{
+    const questionText=normaliseSearchText(match.q);
+    if(isFeeSearch && !/\b(rate|rates|pricing|prices|charge|charges|cost|costs|fee|fees|price)\b/.test(questionText)) return;
+    if(isTroubleshootingQuery && /\b(rate|rates|pricing|prices|charge|charges|cost|costs|fee|fees|price)\b/.test(questionText)) return;
+    if(useRatesFallback && isFeeSearch) return;
+    addResult(match);
+  });
+
+  /* Preserve literal substring matches as lower-priority fallbacks, while
+     applying the same context filter and duplicate-answer canonicalisation. */
+  for(const category of Object.keys(KB)){
+    KB[category].items.forEach(([question,answer])=>{
+      if(isKbContextCompatible(rawText,category,question) &&
+         (normaliseSearchText(question).includes(normalQuery) || normaliseSearchText(answer).includes(normalQuery))){
+        const key=normaliseFaqKey(question);
+        addResult({cat:category,q:question,a:CANONICAL_FAQ_ANSWERS[key] || answer,score:0.1});
+      }
+    });
+  }
+
+  state={view:"search",results:results.slice(0,8)};
+  render();
+}
 
 /* Ask for the browser's built-in confirmation when the tab or window is closed. */
 let exitConfirmed = false;
